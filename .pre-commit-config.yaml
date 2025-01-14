@@ -3,7 +3,7 @@
 # See https://pre-commit.com/hooks.html for more hooks
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.4.0
+    rev: v5.0.0
     hooks:
       - id: trailing-whitespace
         exclude_types: [svg, json]
@@ -12,11 +12,3 @@ repos:
         exclude_types: [svg, json]
 
       - id: check-yaml
-
-  # - repo: https://github.com/igorshubovych/markdownlint-cli
-  #   rev: v0.43.0
-  #   hooks:
-  #   - id: markdownlint
-  #     files: readme.md
-  #     args:
-  #       - --fix
