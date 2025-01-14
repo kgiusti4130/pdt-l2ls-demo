@@ -395,7 +395,7 @@ vlan internal order ascending range 1006 1199
 | 20 | GREEN_NET | - |
 | 30 | ORANGE_NET | - |
 | 40 | RED_NET | - |
-| 50 | JUICE | - |
+| 50 | PDT | - |
 | 60 | TEST_VLAN | - |
 | 70 | IOT_VLAN | - |
 | 80 | AV_VLAN | - |
@@ -419,7 +419,7 @@ vlan 40
    name RED_NET
 !
 vlan 50
-   name JUICE
+   name PDT
 !
 vlan 60
    name TEST_VLAN
@@ -648,7 +648,7 @@ interface Port-Channel1000
 
 | Interface | Description | VRF |  MTU | Shutdown |
 | --------- | ----------- | --- | ---- | -------- |
-| Vlan4092 | JUICE INBAND MGMT | default | 1500 | False |
+| Vlan4092 | PDT INBAND MGMT | default | 1500 | False |
 | Vlan4094 | MLAG | default | 1500 | False |
 
 ##### IPv4
@@ -663,7 +663,7 @@ interface Port-Channel1000
 ```eos
 !
 interface Vlan4092
-   description JUICE INBAND MGMT
+   description PDT INBAND MGMT
    no shutdown
    mtu 1500
    ip address 192.168.161.4/24

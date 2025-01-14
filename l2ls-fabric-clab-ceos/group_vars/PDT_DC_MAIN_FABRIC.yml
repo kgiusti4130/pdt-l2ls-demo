@@ -33,13 +33,13 @@ leaf:
     inband_mgmt_subnet: 192.168.161.0/24
     inband_mgmt_vlan: 4092
     inband_mgmt_vlan_name: PDT_INBAND_MGMT
-    inband_mgmt_description: "JUICE INBAND MGMT"
+    inband_mgmt_description: "PDT INBAND MGMT"
 
   node_groups:
     - group: RACK1
       mlag: true
       filter:
-        tags: [bluezone, greenzone, redzone, JUICE, ALL_IDFs]
+        tags: [bluezone, greenzone, redzone, PDT, ALL_IDFs]
       nodes:
         - name: PDT_LEAF1
           id: 1
@@ -53,7 +53,7 @@ leaf:
     - group: RACK2
       mlag: true
       filter:
-        tags: [bluezone, JUICE, ALL_IDFs]
+        tags: [bluezone, PDT, ALL_IDFs]
       nodes:
         - name: PDT_LEAF3
           id: 3

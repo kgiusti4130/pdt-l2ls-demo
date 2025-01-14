@@ -397,7 +397,7 @@ vlan internal order ascending range 1006 1199
 | 20 | GREEN_NET | - |
 | 30 | ORANGE_NET | - |
 | 40 | RED_NET | - |
-| 50 | JUICE | - |
+| 50 | PDT | - |
 | 60 | TEST_VLAN | - |
 | 70 | IOT_VLAN | - |
 | 80 | AV_VLAN | - |
@@ -421,7 +421,7 @@ vlan 40
    name RED_NET
 !
 vlan 50
-   name JUICE
+   name PDT
 !
 vlan 60
    name TEST_VLAN
@@ -584,7 +584,7 @@ interface Loopback0
 | Vlan20 | GREEN_NET | default | - | False |
 | Vlan30 | ORANGE_NET | default | - | False |
 | Vlan40 | RED_NET | default | - | False |
-| Vlan50 | JUICE | default | - | False |
+| Vlan50 | PDT | default | - | False |
 | Vlan4092 | Inband Management | default | 1500 | False |
 | Vlan4094 | MLAG | default | 1500 | False |
 
@@ -630,7 +630,7 @@ interface Vlan40
    ip virtual-router address 10.40.40.1
 !
 interface Vlan50
-   description JUICE
+   description PDT
    no shutdown
    ip address 10.50.50.2/24
    ip virtual-router address 10.50.50.1

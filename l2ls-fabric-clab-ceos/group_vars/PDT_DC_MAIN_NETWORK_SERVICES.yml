@@ -53,8 +53,8 @@ tenants:
               - node: PDT_SPINE2
                 ip_address: 10.40.40.3/24
           - id: 50
-            name: 'JUICE'
-            tags: [JUICE]
+            name: 'PDT'
+            tags: [PDT]
             enabled: true
             ip_virtual_router_addresses:
               - 10.50.50.1

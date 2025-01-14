@@ -78,7 +78,7 @@ vlans:
   name: RED_NET
   tenant: PDT_DC_MAIN_FABRIC
 - id: 50
-  name: JUICE
+  name: PDT
   tenant: PDT_DC_MAIN_FABRIC
 - id: 60
   name: TEST_VLAN
@@ -100,7 +100,7 @@ vlan_interfaces:
   mtu: 1500
   ip_address: 192.168.0.0/31
 - name: Vlan4092
-  description: JUICE INBAND MGMT
+  description: PDT INBAND MGMT
   shutdown: false
   mtu: 1500
   ip_address: 192.168.161.4/24

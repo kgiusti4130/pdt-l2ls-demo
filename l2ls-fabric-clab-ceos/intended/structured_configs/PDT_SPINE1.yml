@@ -77,7 +77,7 @@ vlans:
   name: RED_NET
   tenant: PDT_DC_MAIN_FABRIC
 - id: 50
-  name: JUICE
+  name: PDT
   tenant: PDT_DC_MAIN_FABRIC
 - id: 60
   name: TEST_VLAN
@@ -139,8 +139,8 @@ vlan_interfaces:
 - name: Vlan50
   tenant: PDT_DC_MAIN_FABRIC
   tags:
-  - JUICE
-  description: JUICE
+  - PDT
+  description: PDT
   shutdown: false
   ip_address: 10.50.50.2/24
   ip_virtual_router_addresses:
