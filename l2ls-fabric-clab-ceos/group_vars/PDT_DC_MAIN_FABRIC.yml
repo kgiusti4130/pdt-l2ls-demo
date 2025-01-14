@@ -1,0 +1,65 @@
+---
+fabric_name: PDT_DC_MAIN_FABRIC
+underlay_routing_protocol: none
+
+l3spine:
+  defaults:
+    platform: cEOS-LAB
+    spanning_tree_mode: rapid-pvst
+    spanning_tree_priority: 8192
+    loopback_ipv4_pool: 192.168.255.0/30
+    mlag_peer_ipv4_pool: 192.168.0.0/31
+    mlag_port_channel_id: 1000
+    mlag_peer_l3_vlan: false
+    virtual_router_mac_address: aa:aa:bb:bb:cc:cc
+
+  node_groups:
+    - group: PDT_DC_MAIN_SPINES
+      nodes:
+        - name: PDT_SPINE1
+          id: 1
+          mgmt_ip: 172.16.1.101/24
+        - name: PDT_SPINE2
+          id: 2
+          mgmt_ip: 172.16.1.102/24
+
+leaf:
+  defaults:
+    platform: cEOS-LAB
+    mlag_peer_ipv4_pool: 192.168.0.0/31
+    mlag_port_channel_id: 1000
+    uplink_switches: [PDT_SPINE1, PDT_SPINE2]
+    spanning_tree_mode: rapid-pvst
+    inband_mgmt_subnet: 192.168.161.0/24
+    inband_mgmt_vlan: 4092
+    inband_mgmt_vlan_name: PDT_INBAND_MGMT
+    inband_mgmt_description: "JUICE INBAND MGMT"
+
+  node_groups:
+    - group: RACK1
+      mlag: true
+      filter:
+        tags: [bluezone, greenzone, redzone, JUICE, ALL_IDFs]
+      nodes:
+        - name: PDT_LEAF1
+          id: 1
+          mgmt_ip: 172.16.1.105/24
+          uplink_switch_interfaces: [Ethernet1, Ethernet1]
+        - name: PDT_LEAF2
+          id: 2
+          mgmt_ip: 172.16.1.106/24
+          uplink_switch_interfaces: [Ethernet2, Ethernet2]
+
+    - group: RACK2
+      mlag: true
+      filter:
+        tags: [bluezone, JUICE, ALL_IDFs]
+      nodes:
+        - name: PDT_LEAF3
+          id: 3
+          mgmt_ip: 172.16.1.107/24
+          uplink_switch_interfaces: [Ethernet3, Ethernet3]
+        - name: PDT_LEAF4
+          id: 4
+          mgmt_ip: 172.16.1.108/24
+          uplink_switch_interfaces: [Ethernet4, Ethernet4]

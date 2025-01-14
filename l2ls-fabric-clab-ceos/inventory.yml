@@ -1,0 +1,35 @@
+# inventory.yml
+PDT_DC_MAIN:
+  children:
+    PDT_DC_MAIN_FABRIC:
+      children:
+        PDT_DC_MAIN_SPINES:
+          hosts:
+            PDT_SPINE1:
+              ansible_host: 172.16.1.101
+              is_deployed: true
+            PDT_SPINE2:
+              ansible_host: 172.16.1.102
+              is_deployed: true
+        PDT_DC_MAIN_LEAFS:
+          hosts:
+            PDT_LEAF1:
+              ansible_host: 172.16.1.105
+              is_deployed: true
+            PDT_LEAF2:
+              ansible_host: 172.16.1.106
+              is_deployed: true
+            PDT_LEAF3:
+              ansible_host: 172.16.1.107
+              is_deployed: true
+            PDT_LEAF4:
+              ansible_host: 172.16.1.108
+              is_deployed: true
+    PDT_DC_MAIN_NETWORK_SERVICES:
+      children:
+        PDT_DC_MAIN_LEAFS:
+        PDT_DC_MAIN_SPINES:
+    PDT_DC_MAIN_NETWORK_PORTS:
+      children:
+        PDT_DC_MAIN_LEAFS:
+        PDT_DC_MAIN_SPINES:

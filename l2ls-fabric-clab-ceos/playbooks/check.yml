@@ -1,0 +1,51 @@
+---
+
+- name: Check AVD configuration compliance with running-config on switches
+  hosts: PDT_DC_MAIN_FABRIC
+  gather_facts: false
+  vars:
+    backup_dir: compliance
+
+  tasks:
+
+    - name: Delete {{ backup_dir }} directory and contents
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: absent
+      run_once: true
+      loop:
+        - "{{ backup_dir }}"
+
+    - name: Check AVD built configs against a config session on the local switch
+      arista.eos.eos_config:
+        diff_against: session
+        src: "../intended/configs/{{ inventory_hostname }}.cfg"
+        replace: config
+      check_mode: true
+      diff: true
+      register: config_diff
+
+    - name: Create new {{ backup_dir }} directory
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+      loop:
+        - "{{ backup_dir }}"
+
+    - name: Output config_diff to local file in {{ backup_dir }} folder
+      ansible.builtin.copy:
+        content: "{{ config_diff.diff.prepared }}"
+        dest: "{{ backup_dir }}/{{ inventory_hostname }}_{{ lookup('pipe', 'date +%m-%d-%Y') }}.diff"
+      when: "config_diff.diff.prepared is defined"
+
+    - name: Send message
+      ansible.builtin.debug:
+        msg:
+          - "Configs are NOT in sync for {{ inventory_hostname }}. Review the diff file in {{ backup_dir }}/{{ inventory_hostname }}.diff"
+      when: "config_diff.diff.prepared is defined"
+
+    - name: Send message
+      ansible.builtin.debug:
+        msg:
+          - "Configs are in sync for {{ inventory_hostname }}. No diff file will be created in the {{ backup_dir }}/{{ inventory_hostname }} folder"
+      when: "config_diff.diff.prepared is not defined"

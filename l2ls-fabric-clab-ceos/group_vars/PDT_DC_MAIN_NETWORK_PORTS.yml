@@ -1,0 +1,90 @@
+---
+### group_vars/PDT_DC_MAIN_NETWORK_PORTS.yml
+
+port_profiles:
+  - profile: PP-DEFAULTS
+    spanning_tree_portfast: edge
+    spanning_tree_bpduguard: enabled
+
+  - profile: PP-GREEN
+    mode: access
+    vlans: "20"
+    description: "GREEN ZONE"
+    parent_profile: PP-DEFAULTS
+
+  - profile: PP-ORANGE
+    mode: access
+    vlans: "30"
+    description: "ORANGE ZONE"
+    parent_profile: PP-DEFAULTS
+
+  - profile: PP-RED
+    mode: access
+    vlans: "40"
+    description: "RED ZONE"
+    parent_profile: PP-DEFAULTS
+
+  - profile: PP-access-vlan10
+    mode: "access"
+    vlans: "10"
+    parent_profile: PP-DEFAULTS
+
+  - profile: PP-access-vlan30
+    mode: "access"
+    vlans: "30"
+    parent_profile: PP-DEFAULTS
+
+  - profile: PP-IOT
+    mode: "access"
+    vlans: "70"
+    description: "IOT PORT"
+    parent_profile: PP-DEFAULTS
+
+###########################################################
+#Multi-homed ports:
+###########################################################
+
+servers:
+  - name: host1                                                            # Server name
+    adapters:
+      - endpoint_ports: [eth1,eth2]                                 # Server port to connect (optional)
+        switch_ports: [Ethernet10,Ethernet10]                       # Switch port to connect server (required)
+        switches: [PDT_LEAF1,PDT_LEAF2]                         # Switch to connect server (required)
+        profile: PP-access-vlan10                                   # Port profile to apply (required)
+        port_channel:
+          mode: active
+
+  - name: host2                                                          # Server name
+    adapters:
+      - endpoint_ports: [eth1,eth2]                                 # Server port to connect (optional)
+        switch_ports: [Ethernet30,Ethernet30]                       # Switch port to connect server (required)
+        switches: [PDT_LEAF3,PDT_LEAF4]                         # Switch to connect server (required)
+        profile: PP-access-vlan30                                   # Port profile to apply (required)
+        port_channel:
+          mode: active
+
+#####################################################
+network_ports:                                      #
+#####################################################
+  - switches:
+      - PDT_LEAF[1-4]
+    switch_ports:
+      - Ethernet11-15
+    profile: PP-IOT
+    description: "IOT"
+
+  - switches:
+      - PDT_LEAF[1-4]
+    switch_ports:
+      - Ethernet16-20
+    profile: PP-ORANGE
+    description: "End User Orange"
+
+  # - switches:
+  #     - PDT_LEAF[1-2]
+  #   switch_ports:
+  #     - Ethernet21-25
+  #   profile: PP-RED
+  #   structured_config:
+  #     lldp:
+  #       transmit: false

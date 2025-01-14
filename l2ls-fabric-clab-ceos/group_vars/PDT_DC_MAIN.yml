@@ -1,0 +1,5 @@
+---
+### group_vars/PDT_DC_MAIN.yml
+
+specific_custom_structured_configuration_snmp_server:
+  location: "Fake data center XYZ"

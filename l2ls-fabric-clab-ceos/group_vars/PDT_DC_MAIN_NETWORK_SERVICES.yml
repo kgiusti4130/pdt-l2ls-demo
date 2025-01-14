@@ -1,0 +1,82 @@
+---
+### group_vars/PDT_DC_MAIN_NETWORK_SERVICES.yml
+tenants:
+  - name: PDT_DC_MAIN_FABRIC
+    vrfs:
+      - name: default
+        enable_mlag_ibgp_peering_vrfs: false
+        svis:
+          - id: 10
+            name: 'BLUE_NET'
+            tags: [bluezone]
+            enabled: true
+            ip_virtual_router_addresses:
+              - 10.10.10.1
+            ip_helpers:
+              - ip_helper: 1.2.3.6
+            nodes:
+              - node: PDT_SPINE1
+                ip_address: 10.10.10.2/24
+              - node: PDT_SPINE2
+                ip_address: 10.10.10.3/24
+          - id: 20
+            name: 'GREEN_NET'
+            tags: [greenzone]
+            enabled: true
+            ip_virtual_router_addresses:
+              - 10.20.20.1
+            nodes:
+              - node: PDT_SPINE1
+                ip_address: 10.20.20.2/24
+              - node: PDT_SPINE2
+                ip_address: 10.20.20.3/24
+          - id: 30
+            name: 'ORANGE_NET'
+            tags: [ALL_IDFs]
+            enabled: true
+            ip_virtual_router_addresses:
+              - 10.30.30.1
+            nodes:
+              - node: PDT_SPINE1
+                ip_address: 10.30.30.2/24
+              - node: PDT_SPINE2
+                ip_address: 10.30.30.3/24
+          - id: 40
+            name: 'RED_NET'
+            tags: [redzone]
+            enabled: true
+            ip_virtual_router_addresses:
+              - 10.40.40.1
+            nodes:
+              - node: PDT_SPINE1
+                ip_address: 10.40.40.2/24
+              - node: PDT_SPINE2
+                ip_address: 10.40.40.3/24
+          - id: 50
+            name: 'JUICE'
+            tags: [JUICE]
+            enabled: true
+            ip_virtual_router_addresses:
+              - 10.50.50.1
+            nodes:
+              - node: PDT_SPINE1
+                ip_address: 10.50.50.2/24
+              - node: PDT_SPINE2
+                ip_address: 10.50.50.3/24
+
+    l2vlans:
+      - id: 60
+        name: 'TEST_VLAN'
+        tags: [ALL_IDFs]
+      - id: 70
+        name: 'IOT_VLAN'
+        tags: [ALL_IDFs]
+      - id: 80
+        name: 'AV_VLAN'
+        tags: [ALL_IDFs]
+      # - id: 90
+      #   name: 'SECURITY_VLAN'
+      #   tags: [ALL_IDFs]
+      # - id: 100
+      #   name: 'HVAC_VLAN'
+      #   tags: [ALL_IDFs]

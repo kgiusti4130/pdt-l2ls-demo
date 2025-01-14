@@ -1,0 +1,26 @@
+anta_inventory:
+  hosts:
+  - host: 172.16.1.101
+    name: PDT_SPINE1
+    tags: ['spine1', 'spines']
+    disable_cache: true
+  - host: 172.16.1.102
+    name: PDT_SPINE2
+    tags: ['spine2', 'spines']
+    disable_cache: true
+  - host: 172.16.1.105
+    name: PDT_LEAF1
+    tags: ['leaf1', 'leafs']
+    disable_cache: true
+  - host: 172.16.1.106
+    name: PDT_LEAF2
+    tags: ['leaf2', 'leafs']
+    disable_cache: true
+  - host: 172.16.1.107
+    name: PDT_LEAF3
+    tags: ['leaf3', 'leafs']
+    disable_cache: true
+  - host: 172.16.1.108
+    name: PDT_LEAF4
+    tags: ['leaf4', 'leafs']
+    disable_cache: true

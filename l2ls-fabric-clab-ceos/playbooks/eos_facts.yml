@@ -1,0 +1,10 @@
+---
+
+- name: EOS FACTS
+  hosts: PDT_DC_MAIN_FABRIC
+  gather_facts: false
+  tasks:
+
+    - name: Gather all legacy facts
+      arista.eos.eos_facts:
+        gather_subset: all

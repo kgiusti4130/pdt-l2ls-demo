@@ -1,0 +1,13 @@
+---
+
+- name: Collect commands
+  hosts: PDT_DC_MAIN_FABRIC
+  connection: local
+  gather_facts: false
+  collections:
+    - arista.avd
+  tasks:
+
+    - name: Collect commands
+      import_role:
+        name: eos_snapshot

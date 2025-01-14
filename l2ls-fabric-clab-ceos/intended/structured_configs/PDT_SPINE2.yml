@@ -1,0 +1,274 @@
+hostname: PDT_SPINE2
+is_deployed: true
+static_routes:
+- vrf: MGMT
+  destination_address_prefix: 0.0.0.0/0
+  gateway: 172.16.1.1
+service_routing_protocols_model: multi-agent
+ip_routing: true
+vlan_internal_order:
+  allocation: ascending
+  range:
+    beginning: 1006
+    ending: 1199
+aaa_root:
+  disabled: true
+config_end: true
+enable_password:
+  disabled: true
+transceiver_qsfp_default_mode_4x10: true
+ip_name_servers:
+- ip_address: 208.67.222.222
+  vrf: MGMT
+- ip_address: 8.8.8.8
+  vrf: MGMT
+interface_defaults:
+  mtu: 1500
+spanning_tree:
+  mode: rapid-pvst
+  no_spanning_tree_vlan: '4094'
+  rapid_pvst_instances:
+  - id: 1-4094
+    priority: 8192
+local_users:
+- name: admin
+  privilege: 15
+  role: network-admin
+  sha512_password: $6$eucN5ngreuExDgwS$xnD7T8jO..GBDX0DUlp.hn.W7yW94xTjSanqgaQGBzPIhDAsyAl9N4oScHvOMvf07uVBFI4mKMxwdVEUVKgY/.
+- name: tech
+  privilege: 15
+  role: network-admin
+  sha512_password: $6$lPVP7lnu40uhe1lD$IucAeKnHNOLhsNOuKeuep9.dssDtIzapo0RUT5YVPDZ0GvSBtO1wuSbJUMIO6D3vooZavJuaijoO4KbiKcPlS1
+- name: test
+  privilege: 15
+  role: network-admin
+  sha512_password: $6$4UgGZHNA/O5uJM3r$91rzQE6bTdO/ZoLgCkCmTsq6HBoPGjWnYIvwL7nVVavwzteS67lKi6gB6rSkHfuNFKT.Jbsqp0biF4TALUnn61
+vrfs:
+- name: MGMT
+  ip_routing: false
+management_interfaces:
+- name: Management0
+  description: OOB MGMT INTERFACE
+  shutdown: false
+  vrf: MGMT
+  ip_address: 172.16.1.102/24
+  gateway: 172.16.1.1
+  type: oob
+management_api_http:
+  enable_vrfs:
+  - name: MGMT
+  enable_https: true
+vlans:
+- id: 4094
+  tenant: system
+  name: MLAG
+  trunk_groups:
+  - MLAG
+- id: 10
+  name: BLUE_NET
+  tenant: PDT_DC_MAIN_FABRIC
+- id: 20
+  name: GREEN_NET
+  tenant: PDT_DC_MAIN_FABRIC
+- id: 30
+  name: ORANGE_NET
+  tenant: PDT_DC_MAIN_FABRIC
+- id: 40
+  name: RED_NET
+  tenant: PDT_DC_MAIN_FABRIC
+- id: 50
+  name: JUICE
+  tenant: PDT_DC_MAIN_FABRIC
+- id: 60
+  name: TEST_VLAN
+  tenant: PDT_DC_MAIN_FABRIC
+- id: 70
+  name: IOT_VLAN
+  tenant: PDT_DC_MAIN_FABRIC
+- id: 80
+  name: AV_VLAN
+  tenant: PDT_DC_MAIN_FABRIC
+- id: 4092
+  tenant: system
+  name: INBAND_MGMT
+vlan_interfaces:
+- name: Vlan4094
+  description: MLAG
+  shutdown: false
+  no_autostate: true
+  mtu: 1500
+  ip_address: 192.168.0.1/31
+- name: Vlan10
+  tenant: PDT_DC_MAIN_FABRIC
+  tags:
+  - bluezone
+  description: BLUE_NET
+  shutdown: false
+  ip_address: 10.10.10.3/24
+  ip_virtual_router_addresses:
+  - 10.10.10.1
+  ip_helpers:
+  - ip_helper: 1.2.3.6
+- name: Vlan20
+  tenant: PDT_DC_MAIN_FABRIC
+  tags:
+  - greenzone
+  description: GREEN_NET
+  shutdown: false
+  ip_address: 10.20.20.3/24
+  ip_virtual_router_addresses:
+  - 10.20.20.1
+- name: Vlan30
+  tenant: PDT_DC_MAIN_FABRIC
+  tags:
+  - ALL_IDFs
+  description: ORANGE_NET
+  shutdown: false
+  ip_address: 10.30.30.3/24
+  ip_virtual_router_addresses:
+  - 10.30.30.1
+- name: Vlan40
+  tenant: PDT_DC_MAIN_FABRIC
+  tags:
+  - redzone
+  description: RED_NET
+  shutdown: false
+  ip_address: 10.40.40.3/24
+  ip_virtual_router_addresses:
+  - 10.40.40.1
+- name: Vlan50
+  tenant: PDT_DC_MAIN_FABRIC
+  tags:
+  - JUICE
+  description: JUICE
+  shutdown: false
+  ip_address: 10.50.50.3/24
+  ip_virtual_router_addresses:
+  - 10.50.50.1
+- name: Vlan4092
+  description: Inband Management
+  shutdown: false
+  mtu: 1500
+  ip_attached_host_route_export:
+    enabled: true
+    distance: 19
+  ip_address: 192.168.161.3/24
+  ip_virtual_router_addresses:
+  - 192.168.161.1
+port_channel_interfaces:
+- name: Port-Channel1000
+  description: MLAG_PDT_SPINE1_Port-Channel1000
+  switchport:
+    enabled: true
+    mode: trunk
+    trunk:
+      groups:
+      - MLAG
+  shutdown: false
+- name: Port-Channel1
+  description: L2_RACK1_Port-Channel1
+  switchport:
+    enabled: true
+    mode: trunk
+    trunk:
+      allowed_vlan: 10,20,30,40,50,60,70,80,4092
+  shutdown: false
+  mlag: 1
+- name: Port-Channel3
+  description: L2_RACK2_Port-Channel1
+  switchport:
+    enabled: true
+    mode: trunk
+    trunk:
+      allowed_vlan: 10,30,50,60,70,80,4092
+  shutdown: false
+  mlag: 3
+ethernet_interfaces:
+- name: Ethernet47
+  peer: PDT_SPINE1
+  peer_interface: Ethernet47
+  peer_type: mlag_peer
+  description: MLAG_PDT_SPINE1_Ethernet47
+  shutdown: false
+  channel_group:
+    id: 1000
+    mode: active
+- name: Ethernet48
+  peer: PDT_SPINE1
+  peer_interface: Ethernet48
+  peer_type: mlag_peer
+  description: MLAG_PDT_SPINE1_Ethernet48
+  shutdown: false
+  channel_group:
+    id: 1000
+    mode: active
+- name: Ethernet1
+  peer: PDT_LEAF1
+  peer_interface: Ethernet2
+  peer_type: leaf
+  description: L2_PDT_LEAF1_Ethernet2
+  shutdown: false
+  channel_group:
+    id: 1
+    mode: active
+- name: Ethernet2
+  peer: PDT_LEAF2
+  peer_interface: Ethernet2
+  peer_type: leaf
+  description: L2_PDT_LEAF2_Ethernet2
+  shutdown: false
+  channel_group:
+    id: 1
+    mode: active
+- name: Ethernet3
+  peer: PDT_LEAF3
+  peer_interface: Ethernet2
+  peer_type: leaf
+  description: L2_PDT_LEAF3_Ethernet2
+  shutdown: false
+  channel_group:
+    id: 3
+    mode: active
+- name: Ethernet4
+  peer: PDT_LEAF4
+  peer_interface: Ethernet2
+  peer_type: leaf
+  description: L2_PDT_LEAF4_Ethernet2
+  shutdown: false
+  channel_group:
+    id: 3
+    mode: active
+mlag_configuration:
+  domain_id: PDT_DC_MAIN_SPINES
+  local_interface: Vlan4094
+  peer_address: 192.168.0.0
+  peer_link: Port-Channel1000
+  reload_delay_mlag: '300'
+  reload_delay_non_mlag: '330'
+loopback_interfaces:
+- name: Loopback0
+  description: ROUTER_ID
+  shutdown: false
+  ip_address: 192.168.255.2/32
+ip_igmp_snooping:
+  globally_enabled: true
+ip_virtual_router_mac_address: aa:aa:bb:bb:cc:cc
+metadata:
+  platform: cEOS-LAB
+snmp_server:
+  contact: Information Technology
+  communities:
+  - name: MY_COMMUNITY
+    access: ro
+    access_list_ipv4:
+      name: SNMP
+  location: Fake data center XYZ
+standard_access_lists:
+- name: SNMP
+  sequence_numbers:
+  - sequence: 10
+    action: permit host 10.0.100.10
+  - sequence: 20
+    action: permit host 10.0.100.20
+  - sequence: 30
+    action: permit host 10.0.100.30

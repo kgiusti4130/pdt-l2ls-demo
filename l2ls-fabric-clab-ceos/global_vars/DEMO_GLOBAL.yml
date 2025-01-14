@@ -1,0 +1,229 @@
+
+avd_data_validation_mode: error
+
+ansible_connection: ansible.netcommon.httpapi
+ansible_network_os: arista.eos.eos
+ansible_user: test
+ansible_password: test
+ansible_become: true
+ansible_become_method: enable
+ansible_httpapi_use_ssl: true
+ansible_httpapi_validate_certs: false
+
+design:
+  type: l2ls
+
+output_format:
+ - text
+ - markdown
+ # - json
+ # - yaml
+
+#############################################
+#        Structured Config settings         #
+#############################################
+custom_structured_configuration_prefix: [ custom_structured_configuration_, global_custom_structured_configuration_, specific_custom_structured_configuration_ ]
+custom_structured_configuration_list_merge: append
+
+fabric_ip_addressing:
+  mlag:
+    algorithm: same_subnet
+
+#############################################
+#        Default interface settings         #
+#############################################
+default_interfaces:
+  - types: [ l3spine ]
+    platforms: [ default ]
+    mlag_interfaces: ['Ethernet47', 'Ethernet48']
+
+  - types: [ leaf ]
+    platforms: [ default ]
+    mlag_interfaces: ['Ethernet47', 'Ethernet48']
+    uplink_interfaces: [Ethernet1, Ethernet2]
+
+#############################################
+#        Platform specific settings         #
+#############################################
+platform_settings:
+  - platforms:
+      - cEOS-LAB
+    management_interface: Management0
+    default_interface_mtu: 1500
+    p2p_uplinks_mtu: 1500
+    reload_delay:
+      mlag: 300
+      non_mlag: 330
+
+#############################################
+#           OOB MGMT settings               #
+#############################################
+mgmt_gateway: 172.16.1.1
+mgmt_interface_description: "OOB MGMT INTERFACE"
+
+terminal:
+  length: 40
+
+name_servers:
+  - 208.67.222.222
+  - 8.8.8.8
+
+management_ssh:
+  idle_timeout: 60
+
+management_console:
+  idle_timeout: 30
+
+ntp:
+  servers:
+    - name: time.google.com
+      iburst: true
+      preferred: true
+      vrf: MGMT
+    - name: pool.ntp.org
+      iburst: true
+      vrf: MGMT
+
+aaa_authorization:
+  exec:
+    default: local
+
+banners:
+  motd: |
+    This is a super secure network, behave or you'll get in big trouble.
+    EOF
+
+global_custom_structured_configuration_snmp_server:
+  contact: Information Technology
+  communities:
+    - name: MY_COMMUNITY
+      access: ro
+      access_list_ipv4:
+        name: SNMP
+
+global_custom_structured_configuration_standard_access_lists:
+  - name: SNMP
+    sequence_numbers:
+      - sequence: 10
+        action: permit host 10.0.100.10
+      - sequence: 20
+        action: permit host 10.0.100.20
+      - sequence: 30
+        action: permit host 10.0.100.30
+
+dns_domain: Hosting_XYZ.com
+
+sflow:
+  run: true
+  sample: 2000
+  dangerous: false
+  polling_interval: 20
+  vrfs:
+    - name: default
+      destinations:
+       - destination: 127.0.0.1
+      source_interface: Vlan4092
+
+event_monitor:
+  enabled: true
+
+logging:
+  buffered:
+    size: 10000
+    level: notifications
+  trap: debugging
+  console: notifications
+  format:
+    timestamp: traditional year
+  vrfs:
+    - name: default
+      source_interface: Vlan4092
+      hosts:
+        - name: 10.0.100.35
+
+local_users:
+  - name: admin
+    privilege: 15
+    role: network-admin
+    sha512_password: "$6$eucN5ngreuExDgwS$xnD7T8jO..GBDX0DUlp.hn.W7yW94xTjSanqgaQGBzPIhDAsyAl9N4oScHvOMvf07uVBFI4mKMxwdVEUVKgY/."
+  - name: test
+    privilege: 15
+    role: network-admin
+    sha512_password: "$6$4UgGZHNA/O5uJM3r$91rzQE6bTdO/ZoLgCkCmTsq6HBoPGjWnYIvwL7nVVavwzteS67lKi6gB6rSkHfuNFKT.Jbsqp0biF4TALUnn61"
+  - name: tech
+    privilege: 15
+    role: network-admin
+    sha512_password: "$6$lPVP7lnu40uhe1lD$IucAeKnHNOLhsNOuKeuep9.dssDtIzapo0RUT5YVPDZ0GvSBtO1wuSbJUMIO6D3vooZavJuaijoO4KbiKcPlS1"
+
+commands_list:
+  - show lldp neighbors
+  - show ip interface brief
+  - show interfaces description
+  - show running-config
+  - show interfaces status
+  - show spanning-tree
+  - show version
+  - show mlag
+  - show ip route vrf all
+  - show logging 30
+
+# Format for path to r/w reports. Sync with default values configured in arista.avd.build_output_folders
+root_dir: '{{ inventory_dir }}'
+
+# AVD configurations output
+# Main output directory
+output_dir_name: 'intended'
+output_dir: '{{ root_dir }}/{{ output_dir_name }}'
+
+# Output for test catalog YAML files if save_catalog is set to true
+test_catalogs_dir_name: 'test_catalogs'
+test_catalogs_dir: '{{ output_dir }}/{{ test_catalogs_dir_name }}'
+
+# Output directory for eos_validate_state reports
+eos_validate_state_name: 'reports'
+eos_validate_state_dir: '{{ root_dir }}/{{ eos_validate_state_name }}'
+
+# Reports name
+eos_validate_state_md_report_path: '{{ eos_validate_state_dir }}/{{ fabric_name }}-state.md'
+eos_validate_state_csv_report_path: '{{ eos_validate_state_dir }}/{{ fabric_name }}-state.csv'
+
+# Markdown flavor to support non-text rendering
+# Only support default and github
+validate_state_markdown_flavor: "default"
+
+# The variable `skipped_tests` can be used for running/skipping tests categories
+# skipped_tests:
+#   - category: AvdTestHardware
+
+# You can also decide to skip specific subtests (ANTA test name) for more granularity
+skipped_tests:
+  - category: AvdTestBGP
+    tests:
+      - VerifyRoutingProtocolModel
+  - category: AvdTestHardware
+    tests:
+      - VerifyEnvironmentCooling
+  - category: AvdTestHardware
+
+# Fabric Name, required to match Ansible Group name covering all devices in the Fabric | Required and **must** be an inventory group name.
+fabric_name: "all"
+
+# Allow different manufacturers
+accepted_xcvr_manufacturers: "{{ validation_role.xcvr_own_manufacturers | arista.avd.default(['Arastra, Inc.', 'Arista Networks']) }}"
+
+# Allow different states for power supplies
+accepted_pwr_supply_states: "{{ validation_role.pwr_supply_states | arista.avd.default(['ok']) }}"
+
+# Allow different states for fans
+accepted_fan_states: "{{ validation_role.fan_states | arista.avd.default(['ok']) }}"
+
+# Generate CSV results file
+validation_report_csv: "{{ validation_role.validation_report_csv | arista.avd.default(true) }}"
+
+# Generate MD results file
+validation_report_md: "{{ validation_role.validation_report_md | arista.avd.default(true) }}"
+
+# Print only FAILED tests
+only_failed_tests: "{{ validation_role.only_failed_tests | arista.avd.default(false) }}"
+save_catalog: false
+logging_level: "WARNING"
