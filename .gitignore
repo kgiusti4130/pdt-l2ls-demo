@@ -72,3 +72,6 @@ test_catalogs/
 # Exclude tokens for CVaaS
 cv-onboarding-token
 cv-onboarding-token-backup
+
+#Exclude ANTA reports
+l2ls-fabric-clab-ceos/reports
