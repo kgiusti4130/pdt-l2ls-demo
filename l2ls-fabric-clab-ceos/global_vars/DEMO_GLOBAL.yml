@@ -1,6 +1,6 @@
+---
 
 avd_data_validation_mode: error
-
 ansible_connection: ansible.netcommon.httpapi
 ansible_network_os: arista.eos.eos
 ansible_user: test
