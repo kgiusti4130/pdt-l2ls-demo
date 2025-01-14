@@ -60,7 +60,7 @@ Thumbs.db
 compliance/
 
 # CLAB files
-# clab/
+clab/clab-cicd1
 
 # Exclude ANTA tech support
 anta/tech-support/
