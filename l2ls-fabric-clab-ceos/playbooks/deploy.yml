@@ -1,6 +1,6 @@
 ---
 
-- name: Build and Deploy Configs.
+- name: Build and Deploy Configs
   hosts: PDT_DC_MAIN_FABRIC
   gather_facts: false
   tasks:
