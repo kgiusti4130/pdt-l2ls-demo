@@ -2,9 +2,9 @@
 
 ```sh
 git clone https://github.com/kgiusti4130/avd-cvaas-ceos-l2ls-demo.git
+pip install -r /workspaces/pdt-l2ls-demo/.devcontainer/requirements.txt
+ansible-galaxy install -r /workspaces/pdt-l2ls-demo/.devcontainer/requirements.yml 
 ```
-
-
 
 ---
 <div align=center markdown>
