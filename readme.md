@@ -2,8 +2,6 @@
 
 ```sh
 git clone https://github.com/kgiusti4130/avd-cvaas-ceos-l2ls-demo.git
-pip install -r /workspaces/pdt-l2ls-demo/.devcontainer/requirements.txt
-ansible-galaxy install -r /workspaces/pdt-l2ls-demo/.devcontainer/requirements.yml 
 ```
 
 ---
@@ -17,6 +15,19 @@ ansible-galaxy install -r /workspaces/pdt-l2ls-demo/.devcontainer/requirements.y
 </div>
 
 ---
+
+## Install requirements
+
+```sh
+pip install -r /workspaces/pdt-l2ls-demo/.devcontainer/requirements.txt
+ansible-galaxy install -r /workspaces/pdt-l2ls-demo/.devcontainer/requirements.yml 
+```
+
+## Change GitHub Codespaces permissions if need be
+
+```sh
+chmod o-w .
+```
 
 ## Once cEOS image is downloaded import it
 
