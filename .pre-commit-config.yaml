@@ -21,3 +21,5 @@ repos:
       args:
         - --fix
         - --disable=MD013
+        - --disable=MD033
+        - --disable=MD045
