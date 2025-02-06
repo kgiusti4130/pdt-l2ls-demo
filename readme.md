@@ -94,7 +94,9 @@ containerlab destroy -t l2ls.yaml
 
 ## Lab Diagram
 
-![Figure: 1](images/topology1.png)
+![Figure: 1](/workspace/images/topology1.png)
+
+/workspace/images/topology1.png
 
 ## ANTA commands
 
