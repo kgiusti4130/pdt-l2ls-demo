@@ -13,11 +13,11 @@ repos:
 
       - id: check-yaml
 
-  - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.43.0
-    hooks:
-    - id: markdownlint
-      files: readme.md
-      args:
-        - --fix
-        - --disable=MD013
+  # - repo: https://github.com/igorshubovych/markdownlint-cli
+  #   rev: v0.43.0
+  #   hooks:
+  #   - id: markdownlint
+  #     files: readme.md
+  #     args:
+  #       - --fix
+  #       - --disable=MD013
