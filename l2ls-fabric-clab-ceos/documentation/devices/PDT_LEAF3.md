@@ -75,6 +75,8 @@ interface Management0
    no shutdown
    vrf MGMT
    ip address 172.16.1.107/24
+   no lldp transmit
+   no lldp receive
 ```
 
 ### DNS Domain

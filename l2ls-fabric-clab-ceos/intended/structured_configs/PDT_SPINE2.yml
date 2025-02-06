@@ -54,6 +54,9 @@ management_interfaces:
   ip_address: 172.16.1.102/24
   gateway: 172.16.1.1
   type: oob
+  lldp:
+    transmit: false
+    receive: false
 management_api_http:
   enable_vrfs:
   - name: MGMT

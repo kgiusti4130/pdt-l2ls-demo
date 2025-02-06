@@ -55,6 +55,13 @@ platform_settings:
       mlag: 300
       non_mlag: 330
 
+    structured_config:
+      management_interfaces:
+        - name: Management0
+          lldp:
+            transmit: false
+            receive: false
+
 #############################################
 #           OOB MGMT settings               #
 #############################################
