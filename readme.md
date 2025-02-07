@@ -96,6 +96,9 @@ containerlab destroy -t l2ls.yaml
 
 ![topology](https://github.com/user-attachments/assets/ac7f38cb-e64d-4c4e-90bd-6b7c034caa66)
 
+![topology_test](https://github.com/kgiusti4130/pdt-l2ls-demo/blob/main/images/topology.png?raw=true)
+
+
 ## ANTA commands
 
 ```sh
