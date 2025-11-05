@@ -12,3 +12,24 @@
     - name: Generate Device Configurations and Documentation
       import_role:
         name: arista.avd.eos_cli_config_gen
+
+- name: Build Configurations and Documentation
+  hosts: PDT_DC_MAIN_FABRIC
+  gather_facts: false
+  vars:
+    digital_twin:
+      environment: act
+      fabric:
+        act_os_version: vEOS-lab
+    output_dir_name: "digital_twin/intended"
+    documentation_dir_name: "digital_twin/documentation"
+    avd_digital_twin_mode: true
+  tasks:
+
+    - name: Generate AVD Structured Configurations and Fabric Documentation
+      ansible.builtin.import_role:
+        name: arista.avd.eos_designs
+
+    - name: Generate Device Configurations and Documentation
+      ansible.builtin.import_role:
+        name: arista.avd.eos_cli_config_gen

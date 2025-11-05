@@ -10,6 +10,9 @@ ansible_become_method: enable
 ansible_httpapi_use_ssl: true
 ansible_httpapi_validate_certs: false
 
+# eos_designs_documentation:
+#   connected_endpoints: false
+
 design:
   type: l2ls
 
@@ -41,26 +44,6 @@ default_interfaces:
     platforms: [ default ]
     mlag_interfaces: ['Ethernet47', 'Ethernet48']
     uplink_interfaces: [Ethernet1, Ethernet2]
-
-#############################################
-#        Platform specific settings         #
-#############################################
-platform_settings:
-  - platforms:
-      - cEOS-LAB
-    management_interface: Management0
-    default_interface_mtu: 1500
-    p2p_uplinks_mtu: 1500
-    reload_delay:
-      mlag: 300
-      non_mlag: 330
-
-    structured_config:
-      management_interfaces:
-        - name: Management0
-          lldp:
-            transmit: false
-            receive: false
 
 #############################################
 #           OOB MGMT settings               #
@@ -234,3 +217,268 @@ validation_report_md: "{{ validation_role.validation_report_md | arista.avd.defa
 only_failed_tests: "{{ validation_role.only_failed_tests | arista.avd.default(false) }}"
 save_catalog: false
 logging_level: "WARNING"
+
+#############################################
+#        Platform specific settings         #
+#############################################
+
+platform_settings:
+- digital_twin:
+    platform: vEOS-lab
+  feature_support:
+    queue_monitor_length_notify: false
+  platforms:
+  - default
+  reload_delay:
+    mlag: 300
+    non_mlag: 330
+
+- digital_twin:
+    platform: vEOS-lab
+  feature_support:
+    queue_monitor_length_notify: false
+  platforms:
+  - 7050X3
+  - 7050SX3
+  reload_delay:
+    mlag: 300
+    non_mlag: 330
+  trident_forwarding_table_partition: flexible exact-match 16384 l2-shared 98304 l3-shared
+    131072
+
+- digital_twin:
+    platform: vEOS-lab
+  feature_support:
+    poe: true
+    queue_monitor_length_notify: false
+  platforms:
+  - 720XP
+  - 720XP-48ZC2
+  - 720XP-48Y6
+  reload_delay:
+    mlag: 300
+    non_mlag: 330
+  trident_forwarding_table_partition: flexible exact-match 16000 l2-shared 18000 l3-shared
+    22000
+
+- digital_twin:
+    platform: vEOS-lab
+  feature_support:
+    poe: true
+    queue_monitor_length_notify: false
+  management_interface: Management0
+  platforms:
+  - '750'
+  - '755'
+  - '758'
+  reload_delay:
+    mlag: 300
+    non_mlag: 330
+
+- digital_twin:
+    platform: vEOS-lab
+  feature_support:
+    poe: true
+    queue_monitor_length_notify: false
+  platforms:
+  - 720DP
+  - 722XP
+  - 710P
+  reload_delay:
+    mlag: 300
+    non_mlag: 330
+
+- digital_twin:
+    platform: vEOS-lab
+  feature_support:
+    per_interface_mtu: false
+    queue_monitor_length_notify: false
+  platforms:
+  - 7010TX
+  reload_delay:
+    mlag: 300
+    non_mlag: 330
+
+- digital_twin:
+    platform: vEOS-lab
+  feature_support:
+    private_vlan: false
+  lag_hardware_only: true
+  platforms:
+  - 7280R
+  - 7280R2
+  - 7020R
+  reload_delay:
+    mlag: 900
+    non_mlag: 1020
+  tcam_profile: vxlan-routing
+
+- digital_twin:
+    platform: vEOS-lab
+  feature_support:
+    evpn_gateway_all_active_multihoming: true
+    private_vlan: false
+  platforms:
+  - 7280R3
+  reload_delay:
+    mlag: 900
+    non_mlag: 1020
+  tcam_profile: vxlan-routing
+
+- digital_twin:
+    platform: vEOS-lab
+  feature_support:
+    private_vlan: false
+  lag_hardware_only: true
+  management_interface: Management0
+  platforms:
+  - 7500R
+  - 7500R2
+  reload_delay:
+    mlag: 900
+    non_mlag: 1020
+  tcam_profile: vxlan-routing
+
+- digital_twin:
+    platform: vEOS-lab
+  feature_support:
+    evpn_gateway_all_active_multihoming: true
+    private_vlan: false
+  management_interface: Management0
+  platforms:
+  - 7500R3
+  - 7800R3
+  reload_delay:
+    mlag: 900
+    non_mlag: 1020
+  tcam_profile: vxlan-routing
+
+- digital_twin:
+    platform: vEOS-lab
+  feature_support:
+    bgp_update_wait_for_convergence: true
+    bgp_update_wait_install: false
+    interface_storm_control: true
+    queue_monitor_length_notify: false
+  management_interface: Management1/1
+  platforms:
+  - 7358X4
+  reload_delay:
+    mlag: 300
+    non_mlag: 330
+
+- digital_twin:
+    platform: vEOS-lab
+  management_interface: Management0
+  platforms:
+  - 7368X4
+  reload_delay:
+    mlag: 300
+    non_mlag: 330
+
+- digital_twin:
+    platform: vEOS-lab
+  management_interface: Management0
+  platforms:
+  - 7300X3
+  reload_delay:
+    mlag: 1200
+    non_mlag: 1320
+  trident_forwarding_table_partition: flexible exact-match 16384 l2-shared 98304 l3-shared
+    131072
+
+####################################
+# Virtual platform settings
+####################################
+- digital_twin:
+    act_node_type: veos
+  feature_support:
+    bgp_update_wait_for_convergence: false
+    bgp_update_wait_install: false
+    evpn_gateway_all_active_multihoming: true
+    interface_storm_control: false
+    queue_monitor_length_notify: false
+  platforms:
+  - VEOS
+  - VEOS-LAB
+  - vEOS
+  - vEOS-lab
+  reload_delay:
+    mlag: 300
+    non_mlag: 330
+  management_interface: Management0
+  default_interface_mtu: 1500
+  p2p_uplinks_mtu: 1500
+
+- digital_twin:
+    act_node_type: veos
+  feature_support:
+    bgp_update_wait_for_convergence: false
+    bgp_update_wait_install: false
+    evpn_gateway_all_active_multihoming: true
+    interface_storm_control: false
+    queue_monitor_length_notify: false
+  management_interface: Management0
+  platforms:
+  - CEOS
+  - cEOS
+  - ceos
+  - cEOSLab
+  reload_delay:
+    mlag: 300
+    non_mlag: 330
+
+- digital_twin:
+    act_node_type: cloudeos
+  feature_support:
+    bgp_update_wait_install: false
+    interface_storm_control: false
+    queue_monitor_length_notify: false
+  p2p_uplinks_mtu: 9194
+  platforms:
+  - CloudEOS
+
+- digital_twin:
+    platform: CloudEOS
+  feature_support:
+    bgp_update_wait_for_convergence: true
+    bgp_update_wait_install: false
+    interface_storm_control: false
+    platform_sfe_interface_profile:
+      max_rx_queues: 6
+      supported: true
+    queue_monitor_length_notify: false
+  management_interface: Management1/1
+  p2p_uplinks_mtu: 9194
+  platforms:
+  - AWE-5310
+  - AWE-7230R
+
+- digital_twin:
+    platform: CloudEOS
+  feature_support:
+    bgp_update_wait_for_convergence: true
+    bgp_update_wait_install: false
+    interface_storm_control: false
+    platform_sfe_interface_profile:
+      max_rx_queues: 16
+      supported: true
+    queue_monitor_length_notify: false
+  management_interface: Management1/1
+  p2p_uplinks_mtu: 9194
+  platforms:
+  - AWE-5510
+  - AWE-7250R
+
+- digital_twin:
+    platform: CloudEOS
+  feature_support:
+    bgp_update_wait_for_convergence: true
+    bgp_update_wait_install: false
+    interface_storm_control: false
+    poe: true
+    queue_monitor_length_notify: false
+  management_interface: Management1
+  p2p_uplinks_mtu: 9194
+  platforms:
+  - AWE-7220R

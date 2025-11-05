@@ -4,7 +4,7 @@ underlay_routing_protocol: none
 
 l3spine:
   defaults:
-    platform: cEOS-LAB
+    platform: 7050SX3
     spanning_tree_mode: rapid-pvst
     spanning_tree_priority: 8192
     loopback_ipv4_pool: 192.168.255.0/30
@@ -25,7 +25,7 @@ l3spine:
 
 leaf:
   defaults:
-    platform: cEOS-LAB
+    platform: 720XP
     mlag_peer_ipv4_pool: 192.168.0.0/31
     mlag_port_channel_id: 1000
     uplink_switches: [PDT_SPINE1, PDT_SPINE2]

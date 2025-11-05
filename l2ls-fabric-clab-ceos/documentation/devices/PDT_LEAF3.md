@@ -32,7 +32,6 @@
   - [VLANs Summary](#vlans-summary)
   - [VLANs Device Configuration](#vlans-device-configuration)
 - [Interfaces](#interfaces)
-  - [Interface Defaults](#interface-defaults)
   - [Ethernet Interfaces](#ethernet-interfaces)
   - [Port-Channel Interfaces](#port-channel-interfaces)
   - [VLAN Interfaces](#vlan-interfaces)
@@ -68,25 +67,23 @@ EOF
 
 | Management Interface | Description | Type | VRF | IP Address | Gateway |
 | -------------------- | ----------- | ---- | --- | ---------- | ------- |
-| Management0 | OOB MGMT INTERFACE | oob | MGMT | 172.16.1.107/24 | 172.16.1.1 |
+| Management1 | OOB MGMT INTERFACE | oob | MGMT | 172.16.1.107/24 | 172.16.1.1 |
 
 ##### IPv6
 
 | Management Interface | Description | Type | VRF | IPv6 Address | IPv6 Gateway |
 | -------------------- | ----------- | ---- | --- | ------------ | ------------ |
-| Management0 | OOB MGMT INTERFACE | oob | MGMT | - | - |
+| Management1 | OOB MGMT INTERFACE | oob | MGMT | - | - |
 
 #### Management Interfaces Device Configuration
 
 ```eos
 !
-interface Management0
+interface Management1
    description OOB MGMT INTERFACE
    no shutdown
    vrf MGMT
    ip address 172.16.1.107/24
-   no lldp transmit
-   no lldp receive
 ```
 
 ### DNS Domain
@@ -437,20 +434,6 @@ vlan 4094
 
 ## Interfaces
 
-### Interface Defaults
-
-#### Interface Defaults Summary
-
-- Default Routed Interface MTU: 1500
-
-#### Interface Defaults Device Configuration
-
-```eos
-!
-interface defaults
-   mtu 1500
-```
-
 ### Ethernet Interfaces
 
 #### Ethernet Interfaces Summary
@@ -646,7 +629,7 @@ interface Port-Channel1000
 | Interface | Description | VRF |  MTU | Shutdown |
 | --------- | ----------- | --- | ---- | -------- |
 | Vlan4092 | PDT INBAND MGMT | default | 1500 | False |
-| Vlan4094 | MLAG | default | 1500 | False |
+| Vlan4094 | MLAG | default | 9214 | False |
 
 ##### IPv4
 
@@ -668,7 +651,7 @@ interface Vlan4092
 interface Vlan4094
    description MLAG
    no shutdown
-   mtu 1500
+   mtu 9214
    no autostate
    ip address 192.168.0.0/31
 ```

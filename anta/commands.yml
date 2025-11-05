@@ -1,0 +1,29 @@
+---
+json_format:
+  - show bfd peers
+  - show version
+  - show running-config
+  - show interfaces status
+  - show interfaces description
+  - show version
+  - show lldp neighbors
+  - show mlag interfaces
+  - show mlag detail
+  - show ip ospf neighbor
+  - show ip route vrf all
+  - show port-channel dense
+
+text_format:
+  - show bfd peers
+  - show version
+  - show running-config
+  - show interfaces status
+  - show interfaces description
+  - show version
+  - show lldp neighbors
+  - show mlag interfaces
+  - show mlag detail
+  - show ip ospf neighbor
+  - show ip route vrf all
+  - show port-channel dense
+  - show logging 200

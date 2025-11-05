@@ -5,164 +5,64 @@ enable_password:
   disabled: true
 ethernet_interfaces:
 - name: Ethernet47
-  description: MLAG_PDT_LEAF1_Ethernet47
+  description: MLAG_PDT_SPINE1_Ethernet47
   shutdown: false
   channel_group:
     id: 1000
     mode: active
-  peer: PDT_LEAF1
+  peer: PDT_SPINE1
   peer_interface: Ethernet47
   peer_type: mlag_peer
 - name: Ethernet48
-  description: MLAG_PDT_LEAF1_Ethernet48
+  description: MLAG_PDT_SPINE1_Ethernet48
   shutdown: false
   channel_group:
     id: 1000
     mode: active
-  peer: PDT_LEAF1
+  peer: PDT_SPINE1
   peer_interface: Ethernet48
   peer_type: mlag_peer
 - name: Ethernet1
-  description: L2_PDT_SPINE1_Ethernet2
+  description: L2_PDT_LEAF1_Ethernet2
   shutdown: false
   channel_group:
     id: 1
     mode: active
-  peer: PDT_SPINE1
+  peer: PDT_LEAF1
   peer_interface: Ethernet2
-  peer_type: l3spine
+  peer_type: leaf
 - name: Ethernet2
-  description: L2_PDT_SPINE2_Ethernet2
+  description: L2_PDT_LEAF2_Ethernet2
   shutdown: false
   channel_group:
     id: 1
     mode: active
-  peer: PDT_SPINE2
+  peer: PDT_LEAF2
   peer_interface: Ethernet2
-  peer_type: l3spine
-- name: Ethernet10
-  description: SERVER_host1_eth2
+  peer_type: leaf
+- name: Ethernet3
+  description: L2_PDT_LEAF3_Ethernet2
   shutdown: false
   channel_group:
-    id: 10
+    id: 3
     mode: active
-  peer: host1
-  peer_interface: eth2
-  peer_type: server
-  port_profile: PP-access-vlan10
-- name: Ethernet11
-  description: IOT
+  peer: PDT_LEAF3
+  peer_interface: Ethernet2
+  peer_type: leaf
+- name: Ethernet4
+  description: L2_PDT_LEAF4_Ethernet2
   shutdown: false
-  spanning_tree_bpduguard: enabled
-  spanning_tree_portfast: edge
-  peer_type: network_port
-  port_profile: PP-IOT
-  switchport:
-    enabled: true
-    mode: access
-    access_vlan: 70
-- name: Ethernet12
-  description: IOT
-  shutdown: false
-  spanning_tree_bpduguard: enabled
-  spanning_tree_portfast: edge
-  peer_type: network_port
-  port_profile: PP-IOT
-  switchport:
-    enabled: true
-    mode: access
-    access_vlan: 70
-- name: Ethernet13
-  description: IOT
-  shutdown: false
-  spanning_tree_bpduguard: enabled
-  spanning_tree_portfast: edge
-  peer_type: network_port
-  port_profile: PP-IOT
-  switchport:
-    enabled: true
-    mode: access
-    access_vlan: 70
-- name: Ethernet14
-  description: IOT
-  shutdown: false
-  spanning_tree_bpduguard: enabled
-  spanning_tree_portfast: edge
-  peer_type: network_port
-  port_profile: PP-IOT
-  switchport:
-    enabled: true
-    mode: access
-    access_vlan: 70
-- name: Ethernet15
-  description: IOT
-  shutdown: false
-  spanning_tree_bpduguard: enabled
-  spanning_tree_portfast: edge
-  peer_type: network_port
-  port_profile: PP-IOT
-  switchport:
-    enabled: true
-    mode: access
-    access_vlan: 70
-- name: Ethernet16
-  description: End User Orange
-  shutdown: false
-  spanning_tree_bpduguard: enabled
-  spanning_tree_portfast: edge
-  peer_type: network_port
-  port_profile: PP-ORANGE
-  switchport:
-    enabled: true
-    mode: access
-    access_vlan: 30
-- name: Ethernet17
-  description: End User Orange
-  shutdown: false
-  spanning_tree_bpduguard: enabled
-  spanning_tree_portfast: edge
-  peer_type: network_port
-  port_profile: PP-ORANGE
-  switchport:
-    enabled: true
-    mode: access
-    access_vlan: 30
-- name: Ethernet18
-  description: End User Orange
-  shutdown: false
-  spanning_tree_bpduguard: enabled
-  spanning_tree_portfast: edge
-  peer_type: network_port
-  port_profile: PP-ORANGE
-  switchport:
-    enabled: true
-    mode: access
-    access_vlan: 30
-- name: Ethernet19
-  description: End User Orange
-  shutdown: false
-  spanning_tree_bpduguard: enabled
-  spanning_tree_portfast: edge
-  peer_type: network_port
-  port_profile: PP-ORANGE
-  switchport:
-    enabled: true
-    mode: access
-    access_vlan: 30
-- name: Ethernet20
-  description: End User Orange
-  shutdown: false
-  spanning_tree_bpduguard: enabled
-  spanning_tree_portfast: edge
-  peer_type: network_port
-  port_profile: PP-ORANGE
-  switchport:
-    enabled: true
-    mode: access
-    access_vlan: 30
+  channel_group:
+    id: 3
+    mode: active
+  peer: PDT_LEAF4
+  peer_interface: Ethernet2
+  peer_type: leaf
 event_monitor:
   enabled: true
-hostname: PDT_LEAF2
+hostname: PDT_SPINE2
+interface_defaults:
+  mtu: 1500
 ip_igmp_snooping:
   globally_enabled: true
 ip_name_servers:
@@ -170,6 +70,8 @@ ip_name_servers:
   vrf: MGMT
 - ip_address: 8.8.8.8
   vrf: MGMT
+ip_routing: true
+ip_virtual_router_mac_address: aa:aa:bb:bb:cc:cc
 local_users:
 - name: admin
   privilege: 15
@@ -183,24 +85,36 @@ local_users:
   privilege: 15
   role: network-admin
   sha512_password: $6$4UgGZHNA/O5uJM3r$91rzQE6bTdO/ZoLgCkCmTsq6HBoPGjWnYIvwL7nVVavwzteS67lKi6gB6rSkHfuNFKT.Jbsqp0biF4TALUnn61
+loopback_interfaces:
+- name: Loopback0
+  description: ROUTER_ID
+  shutdown: false
+  ip_address: 192.168.255.2/32
 management_api_http:
   enable_https: true
   enable_vrfs:
   - name: MGMT
 management_interfaces:
-- name: Management1
+- name: Management0
   description: OOB MGMT INTERFACE
   shutdown: false
   vrf: MGMT
-  ip_address: 172.16.1.106/24
+  ip_address: 172.16.1.102/24
   type: oob
   gateway: 172.16.1.1
 metadata:
   is_deployed: true
-  platform: 720XP
+  platform: vEOS-lab
   fabric_name: PDT_DC_MAIN_FABRIC
+  digital_twin:
+    environment: act
+    node_type: veos
+    ip_addr: 172.16.1.102/24
+    version: vEOS-lab
+    username: cvpadmin
+    password: cvp123!
 mlag_configuration:
-  domain_id: RACK1
+  domain_id: PDT_DC_MAIN_SPINES
   local_interface: Vlan4094
   peer_address: 192.168.0.0
   peer_link: Port-Channel1000
@@ -208,7 +122,7 @@ mlag_configuration:
   reload_delay_non_mlag: '330'
 port_channel_interfaces:
 - name: Port-Channel1000
-  description: MLAG_PDT_LEAF1_Port-Channel1000
+  description: MLAG_PDT_SPINE1_Port-Channel1000
   shutdown: false
   switchport:
     enabled: true
@@ -217,7 +131,7 @@ port_channel_interfaces:
       groups:
       - MLAG
 - name: Port-Channel1
-  description: L2_PDT_DC_MAIN_SPINES_Port-Channel1
+  description: L2_RACK1_Port-Channel1
   shutdown: false
   mlag: 1
   switchport:
@@ -225,16 +139,15 @@ port_channel_interfaces:
     mode: trunk
     trunk:
       allowed_vlan: 10,20,30,40,50,60,70,80,4092
-- name: Port-Channel10
-  description: SERVER_host1
+- name: Port-Channel3
+  description: L2_RACK2_Port-Channel1
   shutdown: false
-  mlag: 10
-  spanning_tree_bpduguard: enabled
-  spanning_tree_portfast: edge
+  mlag: 3
   switchport:
     enabled: true
-    mode: access
-    access_vlan: 10
+    mode: trunk
+    trunk:
+      allowed_vlan: 10,30,50,60,70,80,4092
 service_routing_protocols_model: multi-agent
 snmp_server:
   contact: Information Technology
@@ -249,7 +162,7 @@ spanning_tree:
   no_spanning_tree_vlan: '4094'
   rapid_pvst_instances:
   - id: 1-4094
-    priority: 32768
+    priority: 8192
 standard_access_lists:
 - name: SNMP
   sequence_numbers:
@@ -263,22 +176,71 @@ static_routes:
 - vrf: MGMT
   prefix: 0.0.0.0/0
   next_hop: 172.16.1.1
-- prefix: 0.0.0.0/0
-  next_hop: 192.168.161.1
 transceiver_qsfp_default_mode_4x10: true
 vlan_interfaces:
 - name: Vlan4094
   description: MLAG
   shutdown: false
   ip_address: 192.168.0.1/31
-  mtu: 9214
-  no_autostate: true
-- name: Vlan4092
-  description: PDT INBAND MGMT
-  shutdown: false
-  ip_address: 192.168.161.5/24
   mtu: 1500
-  type: inband_mgmt
+  no_autostate: true
+- name: Vlan10
+  description: BLUE_NET
+  shutdown: false
+  ip_address: 10.10.10.3/24
+  ip_virtual_router_addresses:
+  - 10.10.10.1
+  ip_helpers:
+  - ip_helper: 1.2.3.6
+  tenant: PDT_DC_MAIN_FABRIC
+  tags:
+  - bluezone
+- name: Vlan20
+  description: GREEN_NET
+  shutdown: false
+  ip_address: 10.20.20.3/24
+  ip_virtual_router_addresses:
+  - 10.20.20.1
+  tenant: PDT_DC_MAIN_FABRIC
+  tags:
+  - greenzone
+- name: Vlan30
+  description: ORANGE_NET
+  shutdown: false
+  ip_address: 10.30.30.3/24
+  ip_virtual_router_addresses:
+  - 10.30.30.1
+  tenant: PDT_DC_MAIN_FABRIC
+  tags:
+  - ALL_IDFs
+- name: Vlan40
+  description: RED_NET
+  shutdown: false
+  ip_address: 10.40.40.3/24
+  ip_virtual_router_addresses:
+  - 10.40.40.1
+  tenant: PDT_DC_MAIN_FABRIC
+  tags:
+  - redzone
+- name: Vlan50
+  description: PDT
+  shutdown: false
+  ip_address: 10.50.50.3/24
+  ip_virtual_router_addresses:
+  - 10.50.50.1
+  tenant: PDT_DC_MAIN_FABRIC
+  tags:
+  - PDT
+- name: Vlan4092
+  description: Inband Management
+  shutdown: false
+  ip_address: 192.168.161.3/24
+  ip_virtual_router_addresses:
+  - 192.168.161.1
+  mtu: 1500
+  ip_attached_host_route_export:
+    enabled: true
+    distance: 19
 vlan_internal_order:
   allocation: ascending
   range:
@@ -315,7 +277,7 @@ vlans:
   name: AV_VLAN
   tenant: PDT_DC_MAIN_FABRIC
 - id: 4092
-  name: PDT_INBAND_MGMT
+  name: INBAND_MGMT
   tenant: system
 vrfs:
 - name: MGMT

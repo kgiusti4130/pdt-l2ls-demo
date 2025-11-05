@@ -32,6 +32,7 @@
   - [VLANs Summary](#vlans-summary)
   - [VLANs Device Configuration](#vlans-device-configuration)
 - [Interfaces](#interfaces)
+  - [Interface Defaults](#interface-defaults)
   - [Ethernet Interfaces](#ethernet-interfaces)
   - [Port-Channel Interfaces](#port-channel-interfaces)
   - [Loopback Interfaces](#loopback-interfaces)
@@ -69,19 +70,19 @@ EOF
 
 | Management Interface | Description | Type | VRF | IP Address | Gateway |
 | -------------------- | ----------- | ---- | --- | ---------- | ------- |
-| Management1 | OOB MGMT INTERFACE | oob | MGMT | 172.16.1.102/24 | 172.16.1.1 |
+| Management0 | OOB MGMT INTERFACE | oob | MGMT | 172.16.1.102/24 | 172.16.1.1 |
 
 ##### IPv6
 
 | Management Interface | Description | Type | VRF | IPv6 Address | IPv6 Gateway |
 | -------------------- | ----------- | ---- | --- | ------------ | ------------ |
-| Management1 | OOB MGMT INTERFACE | oob | MGMT | - | - |
+| Management0 | OOB MGMT INTERFACE | oob | MGMT | - | - |
 
 #### Management Interfaces Device Configuration
 
 ```eos
 !
-interface Management1
+interface Management0
    description OOB MGMT INTERFACE
    no shutdown
    vrf MGMT
@@ -444,6 +445,20 @@ vlan 4094
 
 ## Interfaces
 
+### Interface Defaults
+
+#### Interface Defaults Summary
+
+- Default Routed Interface MTU: 1500
+
+#### Interface Defaults Device Configuration
+
+```eos
+!
+interface defaults
+   mtu 1500
+```
+
 ### Ethernet Interfaces
 
 #### Ethernet Interfaces Summary
@@ -574,7 +589,7 @@ interface Loopback0
 | Vlan40 | RED_NET | default | - | False |
 | Vlan50 | PDT | default | - | False |
 | Vlan4092 | Inband Management | default | 1500 | False |
-| Vlan4094 | MLAG | default | 9214 | False |
+| Vlan4094 | MLAG | default | 1500 | False |
 
 ##### IPv4
 
@@ -634,7 +649,7 @@ interface Vlan4092
 interface Vlan4094
    description MLAG
    no shutdown
-   mtu 9214
+   mtu 1500
    no autostate
    ip address 192.168.0.1/31
 ```

@@ -1,0 +1,71 @@
+nodes:
+- PDT_LEAF1:
+    node_type: veos
+    ip_addr: 172.16.1.105/24
+    version: vEOS-lab
+- PDT_LEAF2:
+    node_type: veos
+    ip_addr: 172.16.1.106/24
+    version: vEOS-lab
+- PDT_LEAF3:
+    node_type: veos
+    ip_addr: 172.16.1.107/24
+    version: vEOS-lab
+- PDT_LEAF4:
+    node_type: veos
+    ip_addr: 172.16.1.108/24
+    version: vEOS-lab
+- PDT_SPINE1:
+    node_type: veos
+    ip_addr: 172.16.1.101/24
+    version: vEOS-lab
+- PDT_SPINE2:
+    node_type: veos
+    ip_addr: 172.16.1.102/24
+    version: vEOS-lab
+veos:
+  username: cvpadmin
+  password: cvp123!
+links:
+- connection:
+  - PDT_LEAF1:Ethernet1
+  - PDT_SPINE1:Ethernet1
+- connection:
+  - PDT_LEAF1:Ethernet2
+  - PDT_SPINE2:Ethernet1
+- connection:
+  - PDT_LEAF1:Ethernet47
+  - PDT_LEAF2:Ethernet47
+- connection:
+  - PDT_LEAF1:Ethernet48
+  - PDT_LEAF2:Ethernet48
+- connection:
+  - PDT_LEAF2:Ethernet1
+  - PDT_SPINE1:Ethernet2
+- connection:
+  - PDT_LEAF2:Ethernet2
+  - PDT_SPINE2:Ethernet2
+- connection:
+  - PDT_LEAF3:Ethernet1
+  - PDT_SPINE1:Ethernet3
+- connection:
+  - PDT_LEAF3:Ethernet2
+  - PDT_SPINE2:Ethernet3
+- connection:
+  - PDT_LEAF3:Ethernet47
+  - PDT_LEAF4:Ethernet47
+- connection:
+  - PDT_LEAF3:Ethernet48
+  - PDT_LEAF4:Ethernet48
+- connection:
+  - PDT_LEAF4:Ethernet1
+  - PDT_SPINE1:Ethernet4
+- connection:
+  - PDT_LEAF4:Ethernet2
+  - PDT_SPINE2:Ethernet4
+- connection:
+  - PDT_SPINE1:Ethernet47
+  - PDT_SPINE2:Ethernet47
+- connection:
+  - PDT_SPINE1:Ethernet48
+  - PDT_SPINE2:Ethernet48

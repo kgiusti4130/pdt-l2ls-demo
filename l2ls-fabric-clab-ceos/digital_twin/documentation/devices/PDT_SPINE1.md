@@ -1,4 +1,4 @@
-# PDT_SPINE2
+# PDT_SPINE1
 
 ## Table of Contents
 
@@ -32,6 +32,7 @@
   - [VLANs Summary](#vlans-summary)
   - [VLANs Device Configuration](#vlans-device-configuration)
 - [Interfaces](#interfaces)
+  - [Interface Defaults](#interface-defaults)
   - [Ethernet Interfaces](#ethernet-interfaces)
   - [Port-Channel Interfaces](#port-channel-interfaces)
   - [Loopback Interfaces](#loopback-interfaces)
@@ -69,23 +70,23 @@ EOF
 
 | Management Interface | Description | Type | VRF | IP Address | Gateway |
 | -------------------- | ----------- | ---- | --- | ---------- | ------- |
-| Management1 | OOB MGMT INTERFACE | oob | MGMT | 172.16.1.102/24 | 172.16.1.1 |
+| Management0 | OOB MGMT INTERFACE | oob | MGMT | 172.16.1.101/24 | 172.16.1.1 |
 
 ##### IPv6
 
 | Management Interface | Description | Type | VRF | IPv6 Address | IPv6 Gateway |
 | -------------------- | ----------- | ---- | --- | ------------ | ------------ |
-| Management1 | OOB MGMT INTERFACE | oob | MGMT | - | - |
+| Management0 | OOB MGMT INTERFACE | oob | MGMT | - | - |
 
 #### Management Interfaces Device Configuration
 
 ```eos
 !
-interface Management1
+interface Management0
    description OOB MGMT INTERFACE
    no shutdown
    vrf MGMT
-   ip address 172.16.1.102/24
+   ip address 172.16.1.101/24
 ```
 
 ### DNS Domain
@@ -332,7 +333,7 @@ sflow run
 
 | Domain-id | Local-interface | Peer-address | Peer-link |
 | --------- | --------------- | ------------ | --------- |
-| PDT_DC_MAIN_SPINES | Vlan4094 | 192.168.0.0 | Port-Channel1000 |
+| PDT_DC_MAIN_SPINES | Vlan4094 | 192.168.0.1 | Port-Channel1000 |
 
 Dual primary detection is disabled.
 
@@ -343,7 +344,7 @@ Dual primary detection is disabled.
 mlag configuration
    domain-id PDT_DC_MAIN_SPINES
    local-interface Vlan4094
-   peer-address 192.168.0.0
+   peer-address 192.168.0.1
    peer-link Port-Channel1000
    reload-delay mlag 300
    reload-delay non-mlag 330
@@ -444,6 +445,20 @@ vlan 4094
 
 ## Interfaces
 
+### Interface Defaults
+
+#### Interface Defaults Summary
+
+- Default Routed Interface MTU: 1500
+
+#### Interface Defaults Device Configuration
+
+```eos
+!
+interface defaults
+   mtu 1500
+```
+
 ### Ethernet Interfaces
 
 #### Ethernet Interfaces Summary
@@ -452,12 +467,12 @@ vlan 4094
 
 | Interface | Description | Mode | VLANs | Native VLAN | Trunk Group | Channel-Group |
 | --------- | ----------- | ---- | ----- | ----------- | ----------- | ------------- |
-| Ethernet1 | L2_PDT_LEAF1_Ethernet2 | *trunk | *10,20,30,40,50,60,70,80,4092 | *- | *- | 1 |
-| Ethernet2 | L2_PDT_LEAF2_Ethernet2 | *trunk | *10,20,30,40,50,60,70,80,4092 | *- | *- | 1 |
-| Ethernet3 | L2_PDT_LEAF3_Ethernet2 | *trunk | *10,30,50,60,70,80,4092 | *- | *- | 3 |
-| Ethernet4 | L2_PDT_LEAF4_Ethernet2 | *trunk | *10,30,50,60,70,80,4092 | *- | *- | 3 |
-| Ethernet47 | MLAG_PDT_SPINE1_Ethernet47 | *trunk | *- | *- | *MLAG | 1000 |
-| Ethernet48 | MLAG_PDT_SPINE1_Ethernet48 | *trunk | *- | *- | *MLAG | 1000 |
+| Ethernet1 | L2_PDT_LEAF1_Ethernet1 | *trunk | *10,20,30,40,50,60,70,80,4092 | *- | *- | 1 |
+| Ethernet2 | L2_PDT_LEAF2_Ethernet1 | *trunk | *10,20,30,40,50,60,70,80,4092 | *- | *- | 1 |
+| Ethernet3 | L2_PDT_LEAF3_Ethernet1 | *trunk | *10,30,50,60,70,80,4092 | *- | *- | 3 |
+| Ethernet4 | L2_PDT_LEAF4_Ethernet1 | *trunk | *10,30,50,60,70,80,4092 | *- | *- | 3 |
+| Ethernet47 | MLAG_PDT_SPINE2_Ethernet47 | *trunk | *- | *- | *MLAG | 1000 |
+| Ethernet48 | MLAG_PDT_SPINE2_Ethernet48 | *trunk | *- | *- | *MLAG | 1000 |
 
 *Inherited from Port-Channel Interface
 
@@ -466,32 +481,32 @@ vlan 4094
 ```eos
 !
 interface Ethernet1
-   description L2_PDT_LEAF1_Ethernet2
+   description L2_PDT_LEAF1_Ethernet1
    no shutdown
    channel-group 1 mode active
 !
 interface Ethernet2
-   description L2_PDT_LEAF2_Ethernet2
+   description L2_PDT_LEAF2_Ethernet1
    no shutdown
    channel-group 1 mode active
 !
 interface Ethernet3
-   description L2_PDT_LEAF3_Ethernet2
+   description L2_PDT_LEAF3_Ethernet1
    no shutdown
    channel-group 3 mode active
 !
 interface Ethernet4
-   description L2_PDT_LEAF4_Ethernet2
+   description L2_PDT_LEAF4_Ethernet1
    no shutdown
    channel-group 3 mode active
 !
 interface Ethernet47
-   description MLAG_PDT_SPINE1_Ethernet47
+   description MLAG_PDT_SPINE2_Ethernet47
    no shutdown
    channel-group 1000 mode active
 !
 interface Ethernet48
-   description MLAG_PDT_SPINE1_Ethernet48
+   description MLAG_PDT_SPINE2_Ethernet48
    no shutdown
    channel-group 1000 mode active
 ```
@@ -506,7 +521,7 @@ interface Ethernet48
 | --------- | ----------- | ---- | ----- | ----------- | ------------| --------------------- | ------------------ | ------- | -------- |
 | Port-Channel1 | L2_RACK1_Port-Channel1 | trunk | 10,20,30,40,50,60,70,80,4092 | - | - | - | - | 1 | - |
 | Port-Channel3 | L2_RACK2_Port-Channel1 | trunk | 10,30,50,60,70,80,4092 | - | - | - | - | 3 | - |
-| Port-Channel1000 | MLAG_PDT_SPINE1_Port-Channel1000 | trunk | - | - | MLAG | - | - | - | - |
+| Port-Channel1000 | MLAG_PDT_SPINE2_Port-Channel1000 | trunk | - | - | MLAG | - | - | - | - |
 
 #### Port-Channel Interfaces Device Configuration
 
@@ -529,7 +544,7 @@ interface Port-Channel3
    mlag 3
 !
 interface Port-Channel1000
-   description MLAG_PDT_SPINE1_Port-Channel1000
+   description MLAG_PDT_SPINE2_Port-Channel1000
    no shutdown
    switchport mode trunk
    switchport trunk group MLAG
@@ -544,7 +559,7 @@ interface Port-Channel1000
 
 | Interface | Description | VRF | IP Address |
 | --------- | ----------- | --- | ---------- |
-| Loopback0 | ROUTER_ID | default | 192.168.255.2/32 |
+| Loopback0 | ROUTER_ID | default | 192.168.255.1/32 |
 
 ##### IPv6
 
@@ -559,7 +574,7 @@ interface Port-Channel1000
 interface Loopback0
    description ROUTER_ID
    no shutdown
-   ip address 192.168.255.2/32
+   ip address 192.168.255.1/32
 ```
 
 ### VLAN Interfaces
@@ -574,19 +589,19 @@ interface Loopback0
 | Vlan40 | RED_NET | default | - | False |
 | Vlan50 | PDT | default | - | False |
 | Vlan4092 | Inband Management | default | 1500 | False |
-| Vlan4094 | MLAG | default | 9214 | False |
+| Vlan4094 | MLAG | default | 1500 | False |
 
 ##### IPv4
 
 | Interface | VRF | IP Address | IP Address Virtual | IP Router Virtual Address | ACL In | ACL Out |
 | --------- | --- | ---------- | ------------------ | ------------------------- | ------ | ------- |
-| Vlan10 |  default  |  10.10.10.3/24  |  -  |  10.10.10.1  |  -  |  -  |
-| Vlan20 |  default  |  10.20.20.3/24  |  -  |  10.20.20.1  |  -  |  -  |
-| Vlan30 |  default  |  10.30.30.3/24  |  -  |  10.30.30.1  |  -  |  -  |
-| Vlan40 |  default  |  10.40.40.3/24  |  -  |  10.40.40.1  |  -  |  -  |
-| Vlan50 |  default  |  10.50.50.3/24  |  -  |  10.50.50.1  |  -  |  -  |
-| Vlan4092 |  default  |  192.168.161.3/24  |  -  |  192.168.161.1  |  -  |  -  |
-| Vlan4094 |  default  |  192.168.0.1/31  |  -  |  -  |  -  |  -  |
+| Vlan10 |  default  |  10.10.10.2/24  |  -  |  10.10.10.1  |  -  |  -  |
+| Vlan20 |  default  |  10.20.20.2/24  |  -  |  10.20.20.1  |  -  |  -  |
+| Vlan30 |  default  |  10.30.30.2/24  |  -  |  10.30.30.1  |  -  |  -  |
+| Vlan40 |  default  |  10.40.40.2/24  |  -  |  10.40.40.1  |  -  |  -  |
+| Vlan50 |  default  |  10.50.50.2/24  |  -  |  10.50.50.1  |  -  |  -  |
+| Vlan4092 |  default  |  192.168.161.2/24  |  -  |  192.168.161.1  |  -  |  -  |
+| Vlan4094 |  default  |  192.168.0.0/31  |  -  |  -  |  -  |  -  |
 
 #### VLAN Interfaces Device Configuration
 
@@ -595,48 +610,48 @@ interface Loopback0
 interface Vlan10
    description BLUE_NET
    no shutdown
-   ip address 10.10.10.3/24
+   ip address 10.10.10.2/24
    ip helper-address 1.2.3.6
    ip virtual-router address 10.10.10.1
 !
 interface Vlan20
    description GREEN_NET
    no shutdown
-   ip address 10.20.20.3/24
+   ip address 10.20.20.2/24
    ip virtual-router address 10.20.20.1
 !
 interface Vlan30
    description ORANGE_NET
    no shutdown
-   ip address 10.30.30.3/24
+   ip address 10.30.30.2/24
    ip virtual-router address 10.30.30.1
 !
 interface Vlan40
    description RED_NET
    no shutdown
-   ip address 10.40.40.3/24
+   ip address 10.40.40.2/24
    ip virtual-router address 10.40.40.1
 !
 interface Vlan50
    description PDT
    no shutdown
-   ip address 10.50.50.3/24
+   ip address 10.50.50.2/24
    ip virtual-router address 10.50.50.1
 !
 interface Vlan4092
    description Inband Management
    no shutdown
    mtu 1500
-   ip address 192.168.161.3/24
+   ip address 192.168.161.2/24
    ip attached-host route export 19
    ip virtual-router address 192.168.161.1
 !
 interface Vlan4094
    description MLAG
    no shutdown
-   mtu 9214
+   mtu 1500
    no autostate
-   ip address 192.168.0.1/31
+   ip address 192.168.0.0/31
 ```
 
 ## Routing

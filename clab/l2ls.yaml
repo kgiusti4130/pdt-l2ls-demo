@@ -12,14 +12,10 @@ topology:
       env:
         CLAB_MGMT_VRF: MGMT
 
-#  defaults:
-#    env:
-#      INTFTYPE: et #Setting this environment variable to 'et' is required to support ISIS/OSPF on cEOS
-
   nodes:
     PDT_SPINE1:
       kind: ceos
-      startup-config: ../l2ls-fabric-clab-ceos/intended/configs/PDT_SPINE1.cfg
+      startup-config: ../l2ls-fabric-clab-ceos/digital_twin/intended/configs/PDT_SPINE1.cfg
       mgmt-ipv4: 172.16.1.101
       ports:
         - '22001:22'
@@ -28,7 +24,7 @@ topology:
 
     PDT_SPINE2:
       kind: ceos
-      startup-config: ../l2ls-fabric-clab-ceos/intended/configs/PDT_SPINE2.cfg
+      startup-config: ../l2ls-fabric-clab-ceos/digital_twin/intended/configs/PDT_SPINE2.cfg
       mgmt-ipv4: 172.16.1.102
       ports:
         - '22002:22'
@@ -37,7 +33,7 @@ topology:
 
     PDT_LEAF1:
       kind: ceos
-      startup-config: ../l2ls-fabric-clab-ceos/intended/configs/PDT_LEAF1.cfg
+      startup-config: ../l2ls-fabric-clab-ceos/digital_twin/intended/configs/PDT_LEAF1.cfg
       mgmt-ipv4: 172.16.1.105
       ports:
         - '22003:22'
@@ -46,7 +42,7 @@ topology:
 
     PDT_LEAF2:
       kind: ceos
-      startup-config: ../l2ls-fabric-clab-ceos/intended/configs/PDT_LEAF2.cfg
+      startup-config: ../l2ls-fabric-clab-ceos/digital_twin/intended/configs/PDT_LEAF2.cfg
       mgmt-ipv4: 172.16.1.106
       ports:
         - '22004:22'
@@ -55,7 +51,7 @@ topology:
 
     PDT_LEAF3:
       kind: ceos
-      startup-config: ../l2ls-fabric-clab-ceos/intended/configs/PDT_LEAF3.cfg
+      startup-config: ../l2ls-fabric-clab-ceos/digital_twin/intended/configs/PDT_LEAF3.cfg
       mgmt-ipv4: 172.16.1.107
       ports:
         - '22005:22'
@@ -64,7 +60,7 @@ topology:
 
     PDT_LEAF4:
       kind: ceos
-      startup-config: ../l2ls-fabric-clab-ceos/intended/configs/PDT_LEAF4.cfg
+      startup-config: ../l2ls-fabric-clab-ceos/digital_twin/intended/configs/PDT_LEAF4.cfg
       mgmt-ipv4: 172.16.1.108
       ports:
         - '22006:22'

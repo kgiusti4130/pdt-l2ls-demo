@@ -163,6 +163,8 @@ ethernet_interfaces:
 event_monitor:
   enabled: true
 hostname: PDT_LEAF2
+interface_defaults:
+  mtu: 1500
 ip_igmp_snooping:
   globally_enabled: true
 ip_name_servers:
@@ -188,7 +190,7 @@ management_api_http:
   enable_vrfs:
   - name: MGMT
 management_interfaces:
-- name: Management1
+- name: Management0
   description: OOB MGMT INTERFACE
   shutdown: false
   vrf: MGMT
@@ -197,8 +199,15 @@ management_interfaces:
   gateway: 172.16.1.1
 metadata:
   is_deployed: true
-  platform: 720XP
+  platform: vEOS-lab
   fabric_name: PDT_DC_MAIN_FABRIC
+  digital_twin:
+    environment: act
+    node_type: veos
+    ip_addr: 172.16.1.106/24
+    version: vEOS-lab
+    username: cvpadmin
+    password: cvp123!
 mlag_configuration:
   domain_id: RACK1
   local_interface: Vlan4094
@@ -271,7 +280,7 @@ vlan_interfaces:
   description: MLAG
   shutdown: false
   ip_address: 192.168.0.1/31
-  mtu: 9214
+  mtu: 1500
   no_autostate: true
 - name: Vlan4092
   description: PDT INBAND MGMT

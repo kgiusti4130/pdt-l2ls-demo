@@ -5,10 +5,10 @@
 anta.tests.software:
   - VerifyEOSVersion:
       versions:
-        - 4.31.1F-34554157.4311F (engineering build)
+        - 4.33.1F-39308076.liffeyceoslabarm (engineering build)
   - VerifyTerminAttrVersion:
       versions:
-        - v1.30.0
+        - v1.35.99_devel
 
 #######################################################
 #               Verify field notices                  #
@@ -50,7 +50,7 @@ anta.tests.system:
   - VerifyReloadCause:
   - VerifyCoredump:
   - VerifyAgentLogs:
-  - VerifyCPUUtilization:
+  # - VerifyCPUUtilization: ############# CPU is always high on cEOS
 
 anta.tests.services:
   - VerifyDNSLookup:
@@ -65,6 +65,23 @@ anta.tests.security:
   - VerifyBannerMotd:
         motd_banner: |
             This is a super secure network, behave or you'll get in big trouble.
+
+  - VerifyIPv4ACL:
+      ipv4_access_lists:
+        - name: SNMP
+          entries:
+            - sequence: 10
+              action: permit host 10.0.100.10
+            - sequence: 20
+              action: permit host 10.0.100.20
+            - sequence: 30
+              action: permit host 10.0.100.30
+
+anta.tests.snmp:
+  - VerifySnmpStatus:
+      vrf: default
+  - VerifySnmpContact:
+      contact: "Information Technology"
 
 anta.tests.stp:
   - VerifySTPMode:
@@ -81,10 +98,6 @@ anta.tests.mlag:
   - VerifyMlagStatus:
   - VerifyMlagInterfaces:
   - VerifyMlagConfigSanity:
-
-anta.tests.configuration:
-  - VerifyZeroTouch: # Verifies ZeroTouch is disabled.
-  # - VerifyRunningConfigDiffs:
 
 anta.tests.interfaces:
   - VerifyInterfaceUtilization:
@@ -221,3 +234,31 @@ anta.tests.connectivity:
           neighbor_port: Ethernet48
       filters:
         tags: ['leaf4']
+
+anta.tests.configuration:
+  - VerifyZeroTouch: # Verifies ZeroTouch is disabled.
+  # - VerifyRunningConfigDiffs:
+  - VerifyRunningConfigLines:
+      regex_patterns:
+        - "vrf instance MGMT"
+        - "terminal length 40"
+        - "event-monitor"
+        - "snmp-server community MY_COMMUNITY ro SNMP"
+        - "service routing protocols model multi-agent"
+        - "logging buffered 10000 notifications"
+        - "logging trap debugging"
+        - "logging console notifications"
+        - "logging format timestamp traditional year"
+        - "username admin privilege 15 role network-admin secret sha512"
+        - "username tech privilege 15 role network-admin secret sha512"
+        - "username test privilege 15 role network-admin secret sha512"
+        - "ip name-server vrf MGMT 8.8.8.8"
+        - "ip name-server vrf MGMT 208.67.222.222"
+        - "dns domain Hosting_XYZ.com"
+        - "sflow sample 2000"
+        - "sflow polling-interval 20"
+        - "sflow destination 127.0.0.1"
+        - "sflow run"
+        - "aaa authorization exec default local"
+        - "ntp server vrf MGMT pool.ntp.org iburst"
+        - "ntp server vrf MGMT time.google.com prefer iburst"

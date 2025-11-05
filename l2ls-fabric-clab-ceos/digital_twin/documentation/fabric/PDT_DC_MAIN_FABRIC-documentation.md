@@ -17,12 +17,12 @@
 
 | POD | Type | Node | Management IP | Platform | Provisioned in CloudVision | Serial Number |
 | --- | ---- | ---- | ------------- | -------- | -------------------------- | ------------- |
-| PDT_DC_MAIN_FABRIC | leaf | PDT_LEAF1 | 172.16.1.105/24 | 720XP | Provisioned | - |
-| PDT_DC_MAIN_FABRIC | leaf | PDT_LEAF2 | 172.16.1.106/24 | 720XP | Provisioned | - |
-| PDT_DC_MAIN_FABRIC | leaf | PDT_LEAF3 | 172.16.1.107/24 | 720XP | Provisioned | - |
-| PDT_DC_MAIN_FABRIC | leaf | PDT_LEAF4 | 172.16.1.108/24 | 720XP | Provisioned | - |
-| PDT_DC_MAIN_FABRIC | l3spine | PDT_SPINE1 | 172.16.1.101/24 | 7050SX3 | Provisioned | - |
-| PDT_DC_MAIN_FABRIC | l3spine | PDT_SPINE2 | 172.16.1.102/24 | 7050SX3 | Provisioned | - |
+| PDT_DC_MAIN_FABRIC | leaf | PDT_LEAF1 | 172.16.1.105/24 | vEOS-lab | Provisioned | - |
+| PDT_DC_MAIN_FABRIC | leaf | PDT_LEAF2 | 172.16.1.106/24 | vEOS-lab | Provisioned | - |
+| PDT_DC_MAIN_FABRIC | leaf | PDT_LEAF3 | 172.16.1.107/24 | vEOS-lab | Provisioned | - |
+| PDT_DC_MAIN_FABRIC | leaf | PDT_LEAF4 | 172.16.1.108/24 | vEOS-lab | Provisioned | - |
+| PDT_DC_MAIN_FABRIC | l3spine | PDT_SPINE1 | 172.16.1.101/24 | vEOS-lab | Provisioned | - |
+| PDT_DC_MAIN_FABRIC | l3spine | PDT_SPINE2 | 172.16.1.102/24 | vEOS-lab | Provisioned | - |
 
 > Provision status is based on Ansible inventory declaration and do not represent real status from CloudVision.
 

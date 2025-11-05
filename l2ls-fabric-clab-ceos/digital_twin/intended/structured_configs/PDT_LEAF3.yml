@@ -5,51 +5,51 @@ enable_password:
   disabled: true
 ethernet_interfaces:
 - name: Ethernet47
-  description: MLAG_PDT_LEAF1_Ethernet47
+  description: MLAG_PDT_LEAF4_Ethernet47
   shutdown: false
   channel_group:
     id: 1000
     mode: active
-  peer: PDT_LEAF1
+  peer: PDT_LEAF4
   peer_interface: Ethernet47
   peer_type: mlag_peer
 - name: Ethernet48
-  description: MLAG_PDT_LEAF1_Ethernet48
+  description: MLAG_PDT_LEAF4_Ethernet48
   shutdown: false
   channel_group:
     id: 1000
     mode: active
-  peer: PDT_LEAF1
+  peer: PDT_LEAF4
   peer_interface: Ethernet48
   peer_type: mlag_peer
 - name: Ethernet1
-  description: L2_PDT_SPINE1_Ethernet2
+  description: L2_PDT_SPINE1_Ethernet3
   shutdown: false
   channel_group:
     id: 1
     mode: active
   peer: PDT_SPINE1
-  peer_interface: Ethernet2
+  peer_interface: Ethernet3
   peer_type: l3spine
 - name: Ethernet2
-  description: L2_PDT_SPINE2_Ethernet2
+  description: L2_PDT_SPINE2_Ethernet3
   shutdown: false
   channel_group:
     id: 1
     mode: active
   peer: PDT_SPINE2
-  peer_interface: Ethernet2
+  peer_interface: Ethernet3
   peer_type: l3spine
-- name: Ethernet10
-  description: SERVER_host1_eth2
+- name: Ethernet30
+  description: SERVER_host2_eth1
   shutdown: false
   channel_group:
-    id: 10
+    id: 30
     mode: active
-  peer: host1
-  peer_interface: eth2
+  peer: host2
+  peer_interface: eth1
   peer_type: server
-  port_profile: PP-access-vlan10
+  port_profile: PP-access-vlan30
 - name: Ethernet11
   description: IOT
   shutdown: false
@@ -162,7 +162,9 @@ ethernet_interfaces:
     access_vlan: 30
 event_monitor:
   enabled: true
-hostname: PDT_LEAF2
+hostname: PDT_LEAF3
+interface_defaults:
+  mtu: 1500
 ip_igmp_snooping:
   globally_enabled: true
 ip_name_servers:
@@ -188,27 +190,34 @@ management_api_http:
   enable_vrfs:
   - name: MGMT
 management_interfaces:
-- name: Management1
+- name: Management0
   description: OOB MGMT INTERFACE
   shutdown: false
   vrf: MGMT
-  ip_address: 172.16.1.106/24
+  ip_address: 172.16.1.107/24
   type: oob
   gateway: 172.16.1.1
 metadata:
   is_deployed: true
-  platform: 720XP
+  platform: vEOS-lab
   fabric_name: PDT_DC_MAIN_FABRIC
+  digital_twin:
+    environment: act
+    node_type: veos
+    ip_addr: 172.16.1.107/24
+    version: vEOS-lab
+    username: cvpadmin
+    password: cvp123!
 mlag_configuration:
-  domain_id: RACK1
+  domain_id: RACK2
   local_interface: Vlan4094
-  peer_address: 192.168.0.0
+  peer_address: 192.168.0.1
   peer_link: Port-Channel1000
   reload_delay_mlag: '300'
   reload_delay_non_mlag: '330'
 port_channel_interfaces:
 - name: Port-Channel1000
-  description: MLAG_PDT_LEAF1_Port-Channel1000
+  description: MLAG_PDT_LEAF4_Port-Channel1000
   shutdown: false
   switchport:
     enabled: true
@@ -217,24 +226,24 @@ port_channel_interfaces:
       groups:
       - MLAG
 - name: Port-Channel1
-  description: L2_PDT_DC_MAIN_SPINES_Port-Channel1
+  description: L2_PDT_DC_MAIN_SPINES_Port-Channel3
   shutdown: false
   mlag: 1
   switchport:
     enabled: true
     mode: trunk
     trunk:
-      allowed_vlan: 10,20,30,40,50,60,70,80,4092
-- name: Port-Channel10
-  description: SERVER_host1
+      allowed_vlan: 10,30,50,60,70,80,4092
+- name: Port-Channel30
+  description: SERVER_host2
   shutdown: false
-  mlag: 10
+  mlag: 30
   spanning_tree_bpduguard: enabled
   spanning_tree_portfast: edge
   switchport:
     enabled: true
     mode: access
-    access_vlan: 10
+    access_vlan: 30
 service_routing_protocols_model: multi-agent
 snmp_server:
   contact: Information Technology
@@ -270,13 +279,13 @@ vlan_interfaces:
 - name: Vlan4094
   description: MLAG
   shutdown: false
-  ip_address: 192.168.0.1/31
-  mtu: 9214
+  ip_address: 192.168.0.0/31
+  mtu: 1500
   no_autostate: true
 - name: Vlan4092
   description: PDT INBAND MGMT
   shutdown: false
-  ip_address: 192.168.161.5/24
+  ip_address: 192.168.161.6/24
   mtu: 1500
   type: inband_mgmt
 vlan_internal_order:
@@ -293,14 +302,8 @@ vlans:
 - id: 10
   name: BLUE_NET
   tenant: PDT_DC_MAIN_FABRIC
-- id: 20
-  name: GREEN_NET
-  tenant: PDT_DC_MAIN_FABRIC
 - id: 30
   name: ORANGE_NET
-  tenant: PDT_DC_MAIN_FABRIC
-- id: 40
-  name: RED_NET
   tenant: PDT_DC_MAIN_FABRIC
 - id: 50
   name: PDT

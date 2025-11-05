@@ -1,4 +1,4 @@
-# PDT_SPINE2
+# PDT_LEAF3
 
 ## Table of Contents
 
@@ -32,13 +32,12 @@
   - [VLANs Summary](#vlans-summary)
   - [VLANs Device Configuration](#vlans-device-configuration)
 - [Interfaces](#interfaces)
+  - [Interface Defaults](#interface-defaults)
   - [Ethernet Interfaces](#ethernet-interfaces)
   - [Port-Channel Interfaces](#port-channel-interfaces)
-  - [Loopback Interfaces](#loopback-interfaces)
   - [VLAN Interfaces](#vlan-interfaces)
 - [Routing](#routing)
   - [Service Routing Protocols Model](#service-routing-protocols-model)
-  - [Virtual Router MAC Address](#virtual-router-mac-address)
   - [IP Routing](#ip-routing)
   - [IPv6 Routing](#ipv6-routing)
   - [Static Routes](#static-routes)
@@ -69,23 +68,23 @@ EOF
 
 | Management Interface | Description | Type | VRF | IP Address | Gateway |
 | -------------------- | ----------- | ---- | --- | ---------- | ------- |
-| Management1 | OOB MGMT INTERFACE | oob | MGMT | 172.16.1.102/24 | 172.16.1.1 |
+| Management0 | OOB MGMT INTERFACE | oob | MGMT | 172.16.1.107/24 | 172.16.1.1 |
 
 ##### IPv6
 
 | Management Interface | Description | Type | VRF | IPv6 Address | IPv6 Gateway |
 | -------------------- | ----------- | ---- | --- | ------------ | ------------ |
-| Management1 | OOB MGMT INTERFACE | oob | MGMT | - | - |
+| Management0 | OOB MGMT INTERFACE | oob | MGMT | - | - |
 
 #### Management Interfaces Device Configuration
 
 ```eos
 !
-interface Management1
+interface Management0
    description OOB MGMT INTERFACE
    no shutdown
    vrf MGMT
-   ip address 172.16.1.102/24
+   ip address 172.16.1.107/24
 ```
 
 ### DNS Domain
@@ -332,7 +331,7 @@ sflow run
 
 | Domain-id | Local-interface | Peer-address | Peer-link |
 | --------- | --------------- | ------------ | --------- |
-| PDT_DC_MAIN_SPINES | Vlan4094 | 192.168.0.0 | Port-Channel1000 |
+| RACK2 | Vlan4094 | 192.168.0.1 | Port-Channel1000 |
 
 Dual primary detection is disabled.
 
@@ -341,9 +340,9 @@ Dual primary detection is disabled.
 ```eos
 !
 mlag configuration
-   domain-id PDT_DC_MAIN_SPINES
+   domain-id RACK2
    local-interface Vlan4094
-   peer-address 192.168.0.0
+   peer-address 192.168.0.1
    peer-link Port-Channel1000
    reload-delay mlag 300
    reload-delay non-mlag 330
@@ -359,7 +358,7 @@ STP mode: **rapid-pvst**
 
 | Instance(s) | Priority |
 | -------- | -------- |
-| 1-4094 | 8192 |
+| 1-4094 | 32768 |
 
 #### Global Spanning-Tree Settings
 
@@ -371,7 +370,7 @@ STP mode: **rapid-pvst**
 !
 spanning-tree mode rapid-pvst
 no spanning-tree vlan-id 4094
-spanning-tree vlan-id 1-4094 priority 8192
+spanning-tree vlan-id 1-4094 priority 32768
 ```
 
 ## Internal VLAN Allocation Policy
@@ -396,14 +395,12 @@ vlan internal order ascending range 1006 1199
 | VLAN ID | Name | Trunk Groups |
 | ------- | ---- | ------------ |
 | 10 | BLUE_NET | - |
-| 20 | GREEN_NET | - |
 | 30 | ORANGE_NET | - |
-| 40 | RED_NET | - |
 | 50 | PDT | - |
 | 60 | TEST_VLAN | - |
 | 70 | IOT_VLAN | - |
 | 80 | AV_VLAN | - |
-| 4092 | INBAND_MGMT | - |
+| 4092 | PDT_INBAND_MGMT | - |
 | 4094 | MLAG | MLAG |
 
 ### VLANs Device Configuration
@@ -413,14 +410,8 @@ vlan internal order ascending range 1006 1199
 vlan 10
    name BLUE_NET
 !
-vlan 20
-   name GREEN_NET
-!
 vlan 30
    name ORANGE_NET
-!
-vlan 40
-   name RED_NET
 !
 vlan 50
    name PDT
@@ -435,7 +426,7 @@ vlan 80
    name AV_VLAN
 !
 vlan 4092
-   name INBAND_MGMT
+   name PDT_INBAND_MGMT
 !
 vlan 4094
    name MLAG
@@ -443,6 +434,20 @@ vlan 4094
 ```
 
 ## Interfaces
+
+### Interface Defaults
+
+#### Interface Defaults Summary
+
+- Default Routed Interface MTU: 1500
+
+#### Interface Defaults Device Configuration
+
+```eos
+!
+interface defaults
+   mtu 1500
+```
 
 ### Ethernet Interfaces
 
@@ -452,12 +457,21 @@ vlan 4094
 
 | Interface | Description | Mode | VLANs | Native VLAN | Trunk Group | Channel-Group |
 | --------- | ----------- | ---- | ----- | ----------- | ----------- | ------------- |
-| Ethernet1 | L2_PDT_LEAF1_Ethernet2 | *trunk | *10,20,30,40,50,60,70,80,4092 | *- | *- | 1 |
-| Ethernet2 | L2_PDT_LEAF2_Ethernet2 | *trunk | *10,20,30,40,50,60,70,80,4092 | *- | *- | 1 |
-| Ethernet3 | L2_PDT_LEAF3_Ethernet2 | *trunk | *10,30,50,60,70,80,4092 | *- | *- | 3 |
-| Ethernet4 | L2_PDT_LEAF4_Ethernet2 | *trunk | *10,30,50,60,70,80,4092 | *- | *- | 3 |
-| Ethernet47 | MLAG_PDT_SPINE1_Ethernet47 | *trunk | *- | *- | *MLAG | 1000 |
-| Ethernet48 | MLAG_PDT_SPINE1_Ethernet48 | *trunk | *- | *- | *MLAG | 1000 |
+| Ethernet1 | L2_PDT_SPINE1_Ethernet3 | *trunk | *10,30,50,60,70,80,4092 | *- | *- | 1 |
+| Ethernet2 | L2_PDT_SPINE2_Ethernet3 | *trunk | *10,30,50,60,70,80,4092 | *- | *- | 1 |
+| Ethernet11 | IOT | access | 70 | - | - | - |
+| Ethernet12 | IOT | access | 70 | - | - | - |
+| Ethernet13 | IOT | access | 70 | - | - | - |
+| Ethernet14 | IOT | access | 70 | - | - | - |
+| Ethernet15 | IOT | access | 70 | - | - | - |
+| Ethernet16 | End User Orange | access | 30 | - | - | - |
+| Ethernet17 | End User Orange | access | 30 | - | - | - |
+| Ethernet18 | End User Orange | access | 30 | - | - | - |
+| Ethernet19 | End User Orange | access | 30 | - | - | - |
+| Ethernet20 | End User Orange | access | 30 | - | - | - |
+| Ethernet30 | SERVER_host2_eth1 | *access | *30 | *- | *- | 30 |
+| Ethernet47 | MLAG_PDT_LEAF4_Ethernet47 | *trunk | *- | *- | *MLAG | 1000 |
+| Ethernet48 | MLAG_PDT_LEAF4_Ethernet48 | *trunk | *- | *- | *MLAG | 1000 |
 
 *Inherited from Port-Channel Interface
 
@@ -466,32 +480,117 @@ vlan 4094
 ```eos
 !
 interface Ethernet1
-   description L2_PDT_LEAF1_Ethernet2
+   description L2_PDT_SPINE1_Ethernet3
    no shutdown
    channel-group 1 mode active
 !
 interface Ethernet2
-   description L2_PDT_LEAF2_Ethernet2
+   description L2_PDT_SPINE2_Ethernet3
    no shutdown
    channel-group 1 mode active
 !
-interface Ethernet3
-   description L2_PDT_LEAF3_Ethernet2
+interface Ethernet11
+   description IOT
    no shutdown
-   channel-group 3 mode active
+   switchport access vlan 70
+   switchport mode access
+   switchport
+   spanning-tree portfast
+   spanning-tree bpduguard enable
 !
-interface Ethernet4
-   description L2_PDT_LEAF4_Ethernet2
+interface Ethernet12
+   description IOT
    no shutdown
-   channel-group 3 mode active
+   switchport access vlan 70
+   switchport mode access
+   switchport
+   spanning-tree portfast
+   spanning-tree bpduguard enable
+!
+interface Ethernet13
+   description IOT
+   no shutdown
+   switchport access vlan 70
+   switchport mode access
+   switchport
+   spanning-tree portfast
+   spanning-tree bpduguard enable
+!
+interface Ethernet14
+   description IOT
+   no shutdown
+   switchport access vlan 70
+   switchport mode access
+   switchport
+   spanning-tree portfast
+   spanning-tree bpduguard enable
+!
+interface Ethernet15
+   description IOT
+   no shutdown
+   switchport access vlan 70
+   switchport mode access
+   switchport
+   spanning-tree portfast
+   spanning-tree bpduguard enable
+!
+interface Ethernet16
+   description End User Orange
+   no shutdown
+   switchport access vlan 30
+   switchport mode access
+   switchport
+   spanning-tree portfast
+   spanning-tree bpduguard enable
+!
+interface Ethernet17
+   description End User Orange
+   no shutdown
+   switchport access vlan 30
+   switchport mode access
+   switchport
+   spanning-tree portfast
+   spanning-tree bpduguard enable
+!
+interface Ethernet18
+   description End User Orange
+   no shutdown
+   switchport access vlan 30
+   switchport mode access
+   switchport
+   spanning-tree portfast
+   spanning-tree bpduguard enable
+!
+interface Ethernet19
+   description End User Orange
+   no shutdown
+   switchport access vlan 30
+   switchport mode access
+   switchport
+   spanning-tree portfast
+   spanning-tree bpduguard enable
+!
+interface Ethernet20
+   description End User Orange
+   no shutdown
+   switchport access vlan 30
+   switchport mode access
+   switchport
+   spanning-tree portfast
+   spanning-tree bpduguard enable
+!
+interface Ethernet30
+   description SERVER_host2_eth1
+   no shutdown
+   channel-group 30 mode active
 !
 interface Ethernet47
-   description MLAG_PDT_SPINE1_Ethernet47
+   description MLAG_PDT_LEAF4_Ethernet47
    no shutdown
    channel-group 1000 mode active
 !
 interface Ethernet48
-   description MLAG_PDT_SPINE1_Ethernet48
+   description MLAG_PDT_LEAF4_Ethernet48
    no shutdown
    channel-group 1000 mode active
 ```
@@ -504,62 +603,38 @@ interface Ethernet48
 
 | Interface | Description | Mode | VLANs | Native VLAN | Trunk Group | LACP Fallback Timeout | LACP Fallback Mode | MLAG ID | EVPN ESI |
 | --------- | ----------- | ---- | ----- | ----------- | ------------| --------------------- | ------------------ | ------- | -------- |
-| Port-Channel1 | L2_RACK1_Port-Channel1 | trunk | 10,20,30,40,50,60,70,80,4092 | - | - | - | - | 1 | - |
-| Port-Channel3 | L2_RACK2_Port-Channel1 | trunk | 10,30,50,60,70,80,4092 | - | - | - | - | 3 | - |
-| Port-Channel1000 | MLAG_PDT_SPINE1_Port-Channel1000 | trunk | - | - | MLAG | - | - | - | - |
+| Port-Channel1 | L2_PDT_DC_MAIN_SPINES_Port-Channel3 | trunk | 10,30,50,60,70,80,4092 | - | - | - | - | 1 | - |
+| Port-Channel30 | SERVER_host2 | access | 30 | - | - | - | - | 30 | - |
+| Port-Channel1000 | MLAG_PDT_LEAF4_Port-Channel1000 | trunk | - | - | MLAG | - | - | - | - |
 
 #### Port-Channel Interfaces Device Configuration
 
 ```eos
 !
 interface Port-Channel1
-   description L2_RACK1_Port-Channel1
-   no shutdown
-   switchport trunk allowed vlan 10,20,30,40,50,60,70,80,4092
-   switchport mode trunk
-   switchport
-   mlag 1
-!
-interface Port-Channel3
-   description L2_RACK2_Port-Channel1
+   description L2_PDT_DC_MAIN_SPINES_Port-Channel3
    no shutdown
    switchport trunk allowed vlan 10,30,50,60,70,80,4092
    switchport mode trunk
    switchport
-   mlag 3
+   mlag 1
+!
+interface Port-Channel30
+   description SERVER_host2
+   no shutdown
+   switchport access vlan 30
+   switchport mode access
+   switchport
+   mlag 30
+   spanning-tree portfast
+   spanning-tree bpduguard enable
 !
 interface Port-Channel1000
-   description MLAG_PDT_SPINE1_Port-Channel1000
+   description MLAG_PDT_LEAF4_Port-Channel1000
    no shutdown
    switchport mode trunk
    switchport trunk group MLAG
    switchport
-```
-
-### Loopback Interfaces
-
-#### Loopback Interfaces Summary
-
-##### IPv4
-
-| Interface | Description | VRF | IP Address |
-| --------- | ----------- | --- | ---------- |
-| Loopback0 | ROUTER_ID | default | 192.168.255.2/32 |
-
-##### IPv6
-
-| Interface | Description | VRF | IPv6 Address |
-| --------- | ----------- | --- | ------------ |
-| Loopback0 | ROUTER_ID | default | - |
-
-#### Loopback Interfaces Device Configuration
-
-```eos
-!
-interface Loopback0
-   description ROUTER_ID
-   no shutdown
-   ip address 192.168.255.2/32
 ```
 
 ### VLAN Interfaces
@@ -568,75 +643,32 @@ interface Loopback0
 
 | Interface | Description | VRF |  MTU | Shutdown |
 | --------- | ----------- | --- | ---- | -------- |
-| Vlan10 | BLUE_NET | default | - | False |
-| Vlan20 | GREEN_NET | default | - | False |
-| Vlan30 | ORANGE_NET | default | - | False |
-| Vlan40 | RED_NET | default | - | False |
-| Vlan50 | PDT | default | - | False |
-| Vlan4092 | Inband Management | default | 1500 | False |
-| Vlan4094 | MLAG | default | 9214 | False |
+| Vlan4092 | PDT INBAND MGMT | default | 1500 | False |
+| Vlan4094 | MLAG | default | 1500 | False |
 
 ##### IPv4
 
 | Interface | VRF | IP Address | IP Address Virtual | IP Router Virtual Address | ACL In | ACL Out |
 | --------- | --- | ---------- | ------------------ | ------------------------- | ------ | ------- |
-| Vlan10 |  default  |  10.10.10.3/24  |  -  |  10.10.10.1  |  -  |  -  |
-| Vlan20 |  default  |  10.20.20.3/24  |  -  |  10.20.20.1  |  -  |  -  |
-| Vlan30 |  default  |  10.30.30.3/24  |  -  |  10.30.30.1  |  -  |  -  |
-| Vlan40 |  default  |  10.40.40.3/24  |  -  |  10.40.40.1  |  -  |  -  |
-| Vlan50 |  default  |  10.50.50.3/24  |  -  |  10.50.50.1  |  -  |  -  |
-| Vlan4092 |  default  |  192.168.161.3/24  |  -  |  192.168.161.1  |  -  |  -  |
-| Vlan4094 |  default  |  192.168.0.1/31  |  -  |  -  |  -  |  -  |
+| Vlan4092 |  default  |  192.168.161.6/24  |  -  |  -  |  -  |  -  |
+| Vlan4094 |  default  |  192.168.0.0/31  |  -  |  -  |  -  |  -  |
 
 #### VLAN Interfaces Device Configuration
 
 ```eos
 !
-interface Vlan10
-   description BLUE_NET
-   no shutdown
-   ip address 10.10.10.3/24
-   ip helper-address 1.2.3.6
-   ip virtual-router address 10.10.10.1
-!
-interface Vlan20
-   description GREEN_NET
-   no shutdown
-   ip address 10.20.20.3/24
-   ip virtual-router address 10.20.20.1
-!
-interface Vlan30
-   description ORANGE_NET
-   no shutdown
-   ip address 10.30.30.3/24
-   ip virtual-router address 10.30.30.1
-!
-interface Vlan40
-   description RED_NET
-   no shutdown
-   ip address 10.40.40.3/24
-   ip virtual-router address 10.40.40.1
-!
-interface Vlan50
-   description PDT
-   no shutdown
-   ip address 10.50.50.3/24
-   ip virtual-router address 10.50.50.1
-!
 interface Vlan4092
-   description Inband Management
+   description PDT INBAND MGMT
    no shutdown
    mtu 1500
-   ip address 192.168.161.3/24
-   ip attached-host route export 19
-   ip virtual-router address 192.168.161.1
+   ip address 192.168.161.6/24
 !
 interface Vlan4094
    description MLAG
    no shutdown
-   mtu 9214
+   mtu 1500
    no autostate
-   ip address 192.168.0.1/31
+   ip address 192.168.0.0/31
 ```
 
 ## Routing
@@ -650,33 +682,18 @@ Multi agent routing protocol model enabled
 service routing protocols model multi-agent
 ```
 
-### Virtual Router MAC Address
-
-#### Virtual Router MAC Address Summary
-
-Virtual Router MAC Address: aa:aa:bb:bb:cc:cc
-
-#### Virtual Router MAC Address Device Configuration
-
-```eos
-!
-ip virtual-router mac-address aa:aa:bb:bb:cc:cc
-```
-
 ### IP Routing
 
 #### IP Routing Summary
 
 | VRF | Routing Enabled |
 | --- | --------------- |
-| default | True |
+| default | False |
 | MGMT | False |
 
 #### IP Routing Device Configuration
 
 ```eos
-!
-ip routing
 no ip routing vrf MGMT
 ```
 
@@ -696,11 +713,13 @@ no ip routing vrf MGMT
 | VRF | Destination Prefix | Next Hop IP | Exit interface | Administrative Distance | Tag | Route Name | Metric |
 | --- | ------------------ | ----------- | -------------- | ----------------------- | --- | ---------- | ------ |
 | MGMT | 0.0.0.0/0 | 172.16.1.1 | - | 1 | - | - | - |
+| default | 0.0.0.0/0 | 192.168.161.1 | - | 1 | - | - | - |
 
 #### Static Routes Device Configuration
 
 ```eos
 !
+ip route 0.0.0.0/0 192.168.161.1
 ip route vrf MGMT 0.0.0.0/0 172.16.1.1
 ```
 
