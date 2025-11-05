@@ -1,7 +1,9 @@
 ansible-core==2.16.2
-ansible-lint
 ansible-pylibssh
-anta==1.1.0  #Use for running ANTA standalone
+#anta==0.10.0   #Use for ANTA & AVD integration
+anta==1.4.0   #Use for running ANTA standalone
+anta[cli]
+ansible-lint
 aristaproto>=0.1.1
 asgiref
 certifi
@@ -9,7 +11,7 @@ cffi
 chardet
 click
 colorama
-cryptography<43.0.0
+cryptography>=38.0.4
 cvprac>=1.3.1
 deepmerge>=1.1.0
 future
@@ -25,14 +27,13 @@ packaging
 paramiko
 psutil
 pre-commit
-pyavd==5.1.0
+pyavd==5.7.0
 pycparser
 pynetbox
 pyparsing
 pyez
 pytz
 PyYAML>=6.0.0
-referencing
 requests>=2.27.0
 six
 sqlparse

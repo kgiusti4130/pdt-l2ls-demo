@@ -4,7 +4,6 @@ services:
     build: .
     image: "pdt-dev01:latest"
     container_name: pdt-dev01
-    # restart: always
     restart: no
     command: ['tail', '-f', '/dev/null']
     network_mode: "host"
