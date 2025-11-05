@@ -1,9 +1,9 @@
 {
-	"name": "pdt-dev01",
+	"name": "pdt-dev011",
 	"context": ".",
 	"workspaceFolder": "/workspace",
 	"dockerComposeFile": "docker-compose.yml",
-	"service": "pdt-dev01",
+	"service": "pdt-dev011",
 	"extensions": [
 		"redhat.vscode-yaml",
 		"ms-python.python",

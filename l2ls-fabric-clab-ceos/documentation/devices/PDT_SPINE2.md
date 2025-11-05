@@ -3,6 +3,7 @@
 ## Table of Contents
 
 - [Management](#management)
+  - [Banner](#banner)
   - [Management Interfaces](#management-interfaces)
   - [DNS Domain](#dns-domain)
   - [IP Name Servers](#ip-name-servers)
@@ -51,6 +52,15 @@
   - [VRF Instances Device Configuration](#vrf-instances-device-configuration)
 
 ## Management
+
+### Banner
+
+#### MOTD Banner
+
+```text
+This is a super secure network, behave or you'll get in big trouble.
+EOF
+```
 
 ### Management Interfaces
 
@@ -129,24 +139,17 @@ ntp server vrf MGMT time.google.com prefer iburst
 
 ### Management SSH
 
-#### SSH Timeout and Management
+#### VRFs
 
-| Idle Timeout | SSH Management |
-| ------------ | -------------- |
-| 60 | Enabled |
+| VRF | Enabled | IPv4 ACL | IPv6 ACL |
+| --- | ------- | -------- | -------- |
+| default | True | - | - |
 
-#### Max number of SSH sessions limit and per-host limit
+#### Other SSH Settings
 
-| Connection Limit | Max from a single Host |
-| ---------------- | ---------------------- |
-| - | - |
-
-#### Ciphers and Algorithms
-
-| Ciphers | Key-exchange methods | MAC algorithms | Hostkey server algorithms |
-|---------|----------------------|----------------|---------------------------|
-| default | default | default | default |
-
+| Idle Timeout | Connection Limit | Max from a single Host | Ciphers | Key-exchange methods | MAC algorithms | Hostkey server algorithms |
+| ------------ | ---------------- | ---------------------- | ------- | -------------------- | -------------- | ------------------------- |
+| 60 | - | - | default | default | default | default |
 
 #### Management SSH Device Configuration
 
@@ -174,9 +177,9 @@ management console
 
 #### Management API HTTP Summary
 
-| HTTP | HTTPS | Default Services |
-| ---- | ----- | ---------------- |
-| False | True | - |
+| HTTP | HTTPS | UNIX-Socket | Default Services |
+| ---- | ----- | ----------- | ---------------- |
+| False | True | - | - |
 
 #### Management API VRF Access
 
@@ -261,9 +264,9 @@ aaa authorization exec default local
 | --- | ---------------- |
 | default | Vlan4092 |
 
-| VRF | Hosts | Ports | Protocol |
-| --- | ----- | ----- | -------- |
-| default | 10.0.100.35 | Default | UDP |
+| VRF | Hosts | Ports | Protocol | SSL-profile |
+| --- | ----- | ----- | -------- | ----------- |
+| default | 10.0.100.35 | Default | UDP | - |
 
 #### Logging Servers and Features Device Configuration
 
