@@ -12,7 +12,7 @@ chmod o-w .
 
 ## Open the cloned folder in VScode
 
-![topology](https://github.com/user-attachments/assets/ac7f38cb-e64d-4c4e-90bd-6b7c034caa66)
+![topology](images/reopen1.png)
 
 ## Once cEOS image is downloaded import it
 
