@@ -10,6 +10,10 @@ git clone https://github.com/kgiusti4130/avd-cvaas-ceos-l2ls-demo.git
 chmod o-w .
 ```
 
+## Open the cloned folder in VScode
+
+![topology](https://github.com/user-attachments/assets/ac7f38cb-e64d-4c4e-90bd-6b7c034caa66)
+
 ## Once cEOS image is downloaded import it
 
 ```sh
