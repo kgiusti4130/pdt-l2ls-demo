@@ -12,7 +12,7 @@ chmod o-w .
 
 ## Open the cloned folder in VScode
 
-![topology](images/reopen1.png)
+![topology](https://github.com/kgiusti4130/pdt-l2ls-demo/blob/d2d9c4f812856caaa08ca727c9773b1d23572ddd/images/reopen1.png)
 
 ## Once cEOS image is downloaded import it
 
