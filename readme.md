@@ -14,6 +14,9 @@ chmod o-w .
 
 ![topology](https://github.com/kgiusti4130/pdt-l2ls-demo/blob/ed1e49e262975f1a33f98cb21c98e033d436d534/images/reopen1.png)
 
+<img width="452" height="105" alt="reopen1" src="https://github.com/user-attachments/assets/86641e60-7cf7-4144-a3bf-f96e117e82e6" />
+
+
 ## Once cEOS image is downloaded import it
 
 ```sh
