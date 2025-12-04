@@ -14,11 +14,9 @@ chmod o-w .
 
 <img width="452" height="105" alt="reopen1" src="https://github.com/user-attachments/assets/86641e60-7cf7-4144-a3bf-f96e117e82e6" />
 
-
 ## If not prompted your can "Reopen in container"
 
 <img width="602" height="331" alt="reopen2" src="https://github.com/user-attachments/assets/e64d5d8a-d054-4711-b8a2-2244bc69bba5" />
-
 
 ## Once cEOS image is downloaded import it
 
