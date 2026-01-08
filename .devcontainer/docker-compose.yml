@@ -3,7 +3,6 @@ services:
   pdt-dev011:
     build: .
     image: "pdt-dev011:latest"
-    # container_name: pdt-dev011
     restart: no
     command: ['tail', '-f', '/dev/null']
     network_mode: "host"
